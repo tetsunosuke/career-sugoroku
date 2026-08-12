@@ -60,18 +60,21 @@ export const GENERATIONS: GenerationConfig[] = [
     id: '20s',
     name: '20代（自己発見・吸収）',
     initial4L: { labor: 1, learn: 1, love: 1, leisure: 1 },
+    initialSkills: { interpersonal: 1, thinking: 1, execution: 2, flexibility: 2 },
     drawRuleText: '指定デッキから2枚引いてそのまま2枚獲得（無条件獲得）'
   },
   {
     id: '30s',
     name: '30代（選択と集中）',
     initial4L: { labor: 2, learn: 1, love: 2, leisure: 1 },
+    initialSkills: { interpersonal: 2, thinking: 3, execution: 3, flexibility: 2 },
     drawRuleText: '指定デッキから3枚引いて任意の2枚を選択獲得'
   },
   {
     id: '40s_50s',
     name: '40〜50代（熟練・効果倍増）',
     initial4L: { labor: 3, learn: 2, love: 1, leisure: 1 },
+    initialSkills: { interpersonal: 4, thinking: 4, execution: 3, flexibility: 3 },
     drawRuleText: '指定デッキから2枚引いて任意の1枚を選択獲得（効果2倍！）'
   }
 ];

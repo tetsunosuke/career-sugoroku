@@ -68,6 +68,8 @@ export const SkillAllocationModal: React.FC<Props> = ({
                   isSelected
                     ? 'border-indigo-500 bg-indigo-950/60 ring-2 ring-indigo-500/50'
                     : 'border-slate-800 bg-slate-900/40 opacity-70 hover:opacity-100'
+                } ${
+                  isFavored ? 'ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -81,9 +83,19 @@ export const SkillAllocationModal: React.FC<Props> = ({
                   )}
                 </div>
                 <div className="mt-3">
-                  <h4 className="font-bold text-sm text-slate-100">{sk.label}</h4>
+                  <h4 className="font-bold text-sm text-slate-100">
+                    {isFavored && '⭐ '}
+                    {sk.label}
+                  </h4>
                   <div className="text-xl font-black text-indigo-300 mt-1">
                     +{computedVal} <span className="text-xs font-normal text-slate-400">pt獲得</span>
+                  </div>
+                  <div className="text-[10px] text-slate-500 mt-1">
+                    ベース {baseSkillPt}pt
+                    {course.id === 'venture' && ' + コース +1'}
+                    {character.id === 'CHAR_C' && ' + キャラ +1'}
+                    {isFavored && ' × 1.5倍'}
+                    {` = ${computedVal}pt`}
                   </div>
                 </div>
               </div>

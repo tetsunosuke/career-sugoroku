@@ -23,12 +23,7 @@ export function createInitialPlayer(
     course,
     position: 0,
     stats4L: { ...generation.initial4L },
-    skills: {
-      interpersonal: 1,
-      thinking: 1,
-      execution: 1,
-      flexibility: 1
-    }
+    skills: { ...generation.initialSkills }
   };
 }
 

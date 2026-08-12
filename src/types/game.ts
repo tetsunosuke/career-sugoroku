@@ -34,6 +34,7 @@ export interface GenerationConfig {
   id: Generation;
   name: string;
   initial4L: FourLStats;
+  initialSkills: PortableSkills;
   drawRuleText: string;
 }
 

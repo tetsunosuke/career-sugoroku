@@ -129,12 +129,6 @@ export const GameContainer: React.FC = () => {
     const cardTitles = selectedCards.map((c) => c.title).join(' / ');
     addLog(`経験カード獲得: [${cardTitles}]`, 'card');
 
-    // 9番マスのコース変更特権確認
-    const currentTile = BOARD_TILES[currentPosition];
-    if (currentTile.canChangeCourse) {
-      setCanChangeCourseModal(true);
-    }
-
     // スキル割り振りフェーズへ
     setPhase('SKILL_ALLOCATION');
   };
@@ -166,6 +160,12 @@ export const GameContainer: React.FC = () => {
       flexibility: '柔軟'
     };
     addLog(`スキル割り振り: ${skillNames[allocatedSkill]} +${amount} pt`, 'skill');
+
+    // 9番マスのコース変更特権確認（スキル割り振り後に表示）
+    const currentTile = BOARD_TILES[currentPosition];
+    if (currentTile.canChangeCourse) {
+      setCanChangeCourseModal(true);
+    }
 
     // ターン終了判定
     setTurn((t) => t + 1);
@@ -316,6 +316,7 @@ export const GameContainer: React.FC = () => {
           player={player}
           completedProjects={projects.filter((p) => p.isCompleted)}
           turn={turn}
+          logs={logs}
           onRestart={() => setPhase('SETUP')}
         />
       )}
