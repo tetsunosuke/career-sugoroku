@@ -27,21 +27,28 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
   return (
     <div className="glass-panel p-5 space-y-6 text-slate-100 border-slate-700/50">
       {/* プレイヤー基本概要 */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold text-xl bg-gradient-to-r from-indigo-300 to-white bg-clip-text text-transparent">
-              {character.name}
-            </span>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              {character.riasecType}
-            </span>
+      <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div className="flex items-center gap-3">
+          <img
+            src={character.avatarUrl}
+            alt={character.name}
+            className="w-12 h-12 rounded-full object-cover border-2 border-indigo-400 shadow-md shrink-0"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-xl bg-gradient-to-r from-indigo-300 to-white bg-clip-text text-transparent">
+                {character.name}
+              </span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                {character.riasecType}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {generation.name} • {course.name}
+            </p>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            {generation.name} • {course.name}
-          </p>
         </div>
-        <div className="text-right">
+        <div className="text-right shrink-0">
           <span className="text-xs text-slate-400 uppercase tracking-wider block">現在の経過</span>
           <span className="text-lg font-bold text-indigo-400">Turn {turn}</span>
         </div>

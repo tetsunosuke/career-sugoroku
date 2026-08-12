@@ -38,15 +38,22 @@ export const ResultModal: React.FC<Props> = ({
   return (
     <div className="modal-overlay">
       <div className="glass-panel w-full max-w-2xl p-6 md:p-8 space-y-6 text-slate-100 border-indigo-500/30 text-center">
-        <div className="space-y-2">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-indigo-500 text-white flex items-center justify-center mx-auto shadow-xl shadow-amber-500/20">
-            <Trophy className="w-9 h-9" />
+        <div className="space-y-3">
+          <div className="relative w-20 h-20 mx-auto">
+            <img
+              src={character.avatarUrl}
+              alt={character.name}
+              className="w-20 h-20 rounded-full object-cover border-4 border-amber-400 shadow-xl shadow-amber-500/30"
+            />
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg">
+              <Trophy className="w-5 h-5" />
+            </div>
           </div>
           <h2 className="text-3xl font-extrabold text-white">
             キャリア探求の旅 ゴール到達！🎉
           </h2>
           <p className="text-indigo-300 font-semibold text-sm">
-            {turn} ターンでマス12（長期休暇・リフレッシュ）に到達しました。
+            【{character.name}】が {turn} ターンでマス12（長期休暇・リフレッシュ）に到達しました。
           </p>
         </div>
 

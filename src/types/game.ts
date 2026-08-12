@@ -25,6 +25,7 @@ export interface Character {
   favoredSkill?: SkillType;
   description: string;
   perkText: string;
+  avatarUrl: string;
 }
 
 export type Generation = '20s' | '30s' | '40s_50s';

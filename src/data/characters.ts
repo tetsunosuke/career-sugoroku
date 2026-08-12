@@ -7,7 +7,8 @@ export const CHARACTERS: Character[] = [
     riasecType: 'R（現実的）',
     favoredSkill: 'execution',
     description: '現場での即戦力と実務遂行能力に優れる技術思考スペシャリスト。',
-    perkText: '「実行」スキル獲得時、ポイント1.5倍（端数切り捨て）'
+    perkText: '「実行」スキル獲得時、ポイント1.5倍（端数切り捨て）',
+    avatarUrl: '/images/takumi.jpg'
   },
   {
     id: 'CHAR_I',
@@ -15,7 +16,8 @@ export const CHARACTERS: Character[] = [
     riasecType: 'I（研究的）',
     favoredSkill: 'thinking',
     description: '本質を問い、緻密な構造化と課題発見を得意とするアナリスト。',
-    perkText: '「思考」スキル獲得時、ポイント1.5倍（端数切り捨て）'
+    perkText: '「思考」スキル獲得時、ポイント1.5倍（端数切り捨て）',
+    avatarUrl: '/images/sakura.jpg'
   },
   {
     id: 'CHAR_A',
@@ -23,7 +25,8 @@ export const CHARACTERS: Character[] = [
     riasecType: 'A（芸術的）',
     favoredSkill: 'flexibility',
     description: '固定概念に囚われず、変化に適応し枠を超えるクリエイター。',
-    perkText: '「柔軟」スキル獲得時、ポイント1.5倍（端数切り捨て）'
+    perkText: '「柔軟」スキル獲得時、ポイント1.5倍（端数切り捨て）',
+    avatarUrl: '/images/aoi.jpg'
   },
   {
     id: 'CHAR_S',
@@ -31,21 +34,24 @@ export const CHARACTERS: Character[] = [
     riasecType: 'S（社会的）',
     favoredSkill: 'interpersonal',
     description: '他者の感情に寄り添い、信頼と巻き込みで協働を促すファシリテーター。',
-    perkText: '「対人」スキル獲得時、ポイント1.5倍（端数切り捨て）'
+    perkText: '「対人」スキル獲得時、ポイント1.5倍（端数切り捨て）',
+    avatarUrl: '/images/karen.jpg'
   },
   {
     id: 'CHAR_E',
     name: 'ダイキ',
     riasecType: 'E（企業的）',
     description: '事業の機会を見出し、人を巻き込んで価値を生み出すアントレプレナー。',
-    perkText: '協力プロジェクト達成時、獲得4Lが全項目 +1'
+    perkText: '協力プロジェクト達成時、獲得4Lが全項目 +1',
+    avatarUrl: '/images/daiki.jpg'
   },
   {
     id: 'CHAR_C',
     name: 'リツコ',
     riasecType: 'C（慣習的）',
     description: '確実で無駄のないプロセスとリスク管理で組織を安定させるスペシャリスト。',
-    perkText: '4Lからスキルへの変換効率補正（スキル割り振りに+1ボーナス）'
+    perkText: '4Lからスキルへの変換効率補正（スキル割り振りに+1ボーナス）',
+    avatarUrl: '/images/ritsuko.jpg'
   }
 ];
 
