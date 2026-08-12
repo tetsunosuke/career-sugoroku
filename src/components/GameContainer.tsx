@@ -18,7 +18,8 @@ import { COURSES } from '../data/characters';
 import {
   createInitialPlayer,
   getDeckCards,
-  getDrawCount
+  getDrawCount,
+  getRandomSkill
 } from '../logic/gameEngine';
 
 import { SetupModal } from './SetupModal';
@@ -140,7 +141,7 @@ export const GameContainer: React.FC = () => {
       leisure: player.stats4L.leisure + gainedLeisure
     };
 
-    setPlayer({ ...player, stats4L: updated4L });
+    let updatedSkills = { ...player.skills };
 
     // ログ記録
     const statSummary = [
@@ -152,12 +153,25 @@ export const GameContainer: React.FC = () => {
 
     addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]`, 'card');
 
-    // 「Learn(学び)」が得られた場合のみ、ポータブルスキル変換フェーズへ進む
+    // ① Labor獲得による偶発的なポータブルスキルランダム成長
+    if (gainedLabor > 0) {
+      const randomSkill = getRandomSkill();
+      updatedSkills[randomSkill.key] = updatedSkills[randomSkill.key] + 1;
+      addLog(`⚡ 現場での実践(Labor +${gainedLabor})により、【${randomSkill.label}】スキルが偶発的に+1成長！`, 'skill');
+    }
+
+    setPlayer({
+      ...player,
+      stats4L: updated4L,
+      skills: updatedSkills
+    });
+
+    // ② Learn(学び)が得られた場合のみ、ポータブルスキル手動変換フェーズへ進む
     if (gainedLearn > 0) {
       setPendingSkillBasePt(gainedLearn);
       setPhase('SKILL_ALLOCATION');
     } else {
-      addLog('今回の経験では「学び(Learn)」が得られなかったため、スキル変換は行われませんでした。', 'info');
+      addLog('今回の経験では「学び(Learn)」が得られなかったため、主体的スキル変換はスキップされました。', 'info');
       // 9番マスのコース変更特権確認
       const currentTile = BOARD_TILES[currentPosition];
       if (currentTile.canChangeCourse) {

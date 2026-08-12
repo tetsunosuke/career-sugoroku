@@ -134,3 +134,17 @@ export function canCompleteProject(skills: PortableSkills, project: CoOpProject)
   }
   return true;
 }
+
+/**
+ * ランダムに1つのポータブルスキルを取得 (Labor獲得時の偶発的成長)
+ */
+export function getRandomSkill(): { key: SkillType; label: string } {
+  const skills: { key: SkillType; label: string }[] = [
+    { key: 'interpersonal', label: '対人' },
+    { key: 'thinking', label: '思考' },
+    { key: 'execution', label: '実行' },
+    { key: 'flexibility', label: '柔軟' }
+  ];
+  const idx = Math.floor(Math.random() * skills.length);
+  return skills[idx];
+}
