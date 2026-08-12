@@ -1,0 +1,18 @@
+---
+import { GameContainer } from '../components/GameContainer';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>キャリアすごろく (Career Sugoroku) - 自律型キャリアシミュレーション</title>
+    <meta name="description" content="経験を表すカードマスを巡り、4L要素を受け入れながらポータブルスキルへ変換・意味づけしていく自律型キャリアシミュレーションゲーム。" />
+  </head>
+  <body>
+    <GameContainer client:only="react" />
+  </body>
+</html>
