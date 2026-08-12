@@ -106,6 +106,11 @@ export const Board: React.FC<Props> = ({ currentPosition }) => {
                 <p className="text-[11px] text-slate-400 mt-1 line-clamp-2 leading-tight">
                   {tile.effectDescription}
                 </p>
+                {tile.skillCondition && (
+                  <div className="mt-1.5 px-2 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-[10px] font-bold text-amber-300">
+                    ⚡ {tile.skillCondition.description}
+                  </div>
+                )}
               </div>
 
               {/* フッター */}

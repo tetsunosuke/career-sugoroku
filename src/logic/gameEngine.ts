@@ -74,7 +74,13 @@ export function getDeckCards(deckType: DeckType, count: number): Card4L[] {
 /**
  * 年代およびコースに基づいたドロー枚数を決定
  */
-export function getDrawCount(gen: GenerationConfig, course: CourseConfig, deckType: DeckType): { drawCount: number; selectCount: number; multiplier: number } {
+export function getDrawCount(
+  gen: GenerationConfig,
+  course: CourseConfig,
+  deckType: DeckType,
+  skills?: PortableSkills,
+  tile?: BoardTile
+): { drawCount: number; selectCount: number; multiplier: number; skillBonusApplied: boolean; skillBonusText?: string } {
   let drawCount = 2;
   let selectCount = 2;
   let multiplier = 1;
@@ -98,7 +104,20 @@ export function getDrawCount(gen: GenerationConfig, course: CourseConfig, deckTy
     drawCount += 1;
   }
 
-  return { drawCount, selectCount, multiplier };
+  // ポータブルスキルの条件判定によるドロー加算
+  let skillBonusApplied = false;
+  let skillBonusText: string | undefined = undefined;
+
+  if (skills && tile && tile.skillCondition) {
+    const { skill, threshold, bonusDrawCount, description } = tile.skillCondition;
+    if ((skills[skill] || 0) >= threshold) {
+      drawCount += bonusDrawCount;
+      skillBonusApplied = true;
+      skillBonusText = description;
+    }
+  }
+
+  return { drawCount, selectCount, multiplier, skillBonusApplied, skillBonusText };
 }
 
 /**

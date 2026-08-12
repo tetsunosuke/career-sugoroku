@@ -102,7 +102,18 @@ export const GameContainer: React.FC = () => {
       targetDeck = tile.deck;
     }
 
-    const { drawCount, selectCount, multiplier } = getDrawCount(player.generation, player.course, targetDeck);
+    const { drawCount, selectCount, multiplier, skillBonusApplied, skillBonusText } = getDrawCount(
+      player.generation,
+      player.course,
+      targetDeck,
+      player.skills,
+      tile
+    );
+
+    if (skillBonusApplied && skillBonusText) {
+      addLog(`✨ スキル条件判定クリア！ ${skillBonusText}`, 'skill');
+    }
+
     const cards = getDeckCards(targetDeck, drawCount);
 
     setDrawnCards(cards);

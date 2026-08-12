@@ -15,7 +15,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '仕事',
     deck: 'work',
     skillPt: 1,
-    effectDescription: '未知の事業立ち上げを牽引し、仕事実績を獲得。'
+    effectDescription: '未知の事業立ち上げを牽引し、仕事実績を獲得。',
+    skillCondition: {
+      skill: 'execution',
+      threshold: 3,
+      bonusDrawCount: 1,
+      description: '【実行】3pt以上で仕事カードドロー +1枚！'
+    }
   },
   {
     id: 2,
@@ -23,7 +29,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '仕事',
     deck: 'work',
     skillPt: 1,
-    effectDescription: '既存プロセスの無駄を省き、効率化に貢献。'
+    effectDescription: '既存プロセスの無駄を省き、効率化に貢献。',
+    skillCondition: {
+      skill: 'thinking',
+      threshold: 3,
+      bonusDrawCount: 1,
+      description: '【思考】3pt以上で仕事カードドロー +1枚！'
+    }
   },
   {
     id: 3,
@@ -39,7 +51,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '学び',
     deck: 'learn',
     skillPt: 2,
-    effectDescription: '体系的な専門スキルを磨き、信頼性を証明。'
+    effectDescription: '体系的な専門スキルを磨き、信頼性を証明。',
+    skillCondition: {
+      skill: 'thinking',
+      threshold: 4,
+      bonusDrawCount: 1,
+      description: '【思考】4pt以上で学びカードドロー +1枚！'
+    }
   },
   {
     id: 5,
@@ -47,7 +65,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '複合',
     deck: 'choice',
     skillPt: 1,
-    effectDescription: '多様な価値観を調和させ、組織の結束力を高める。（仕事/ライフ選択）'
+    effectDescription: '多様な価値観を調和させ、組織の結束力を高める。（仕事/ライフ選択）',
+    skillCondition: {
+      skill: 'interpersonal',
+      threshold: 3,
+      bonusDrawCount: 1,
+      description: '【対人】3pt以上でカードドロー +1枚！'
+    }
   },
   {
     id: 6,
@@ -63,7 +87,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: 'ライフ',
     deck: 'life',
     skillPt: 1,
-    effectDescription: '社外コミュニティでの貢献から人間関係を拡大。'
+    effectDescription: '社外コミュニティでの貢献から人間関係を拡大。',
+    skillCondition: {
+      skill: 'interpersonal',
+      threshold: 3,
+      bonusDrawCount: 1,
+      description: '【対人】3pt以上でライフカードドロー +1枚！'
+    }
   },
   {
     id: 8,
@@ -71,7 +101,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '複合',
     deck: 'choice',
     skillPt: 2,
-    effectDescription: '慣れ親しんだ環境を離れ、国際的視野を養う。（仕事/学び選択）'
+    effectDescription: '慣れ親しんだ環境を離れ、国際的視野を養う。（仕事/学び選択）',
+    skillCondition: {
+      skill: 'flexibility',
+      threshold: 3,
+      bonusDrawCount: 1,
+      description: '【柔軟】3pt以上でカードドロー +1枚！'
+    }
   },
   {
     id: 9,
@@ -80,7 +116,13 @@ export const BOARD_TILES: BoardTile[] = [
     deck: 'choice',
     skillPt: 1,
     effectDescription: '社外での挑戦を通じて新たな才能を開花。（任意のデッキドロー＆コース変更可能）',
-    canChangeCourse: true
+    canChangeCourse: true,
+    skillCondition: {
+      skill: 'flexibility',
+      threshold: 4,
+      bonusDrawCount: 1,
+      description: '【柔軟】4pt以上でカードドロー +1枚！'
+    }
   },
   {
     id: 10,
@@ -97,7 +139,13 @@ export const BOARD_TILES: BoardTile[] = [
     category: '対人',
     deck: 'choice',
     skillPt: 1,
-    effectDescription: '次世代を育成し、相手の成長と同時に自己再発見。（学び/ライフ選択）'
+    effectDescription: '次世代を育成し、相手の成長と同時に自己再発見。（学び/ライフ選択）',
+    skillCondition: {
+      skill: 'interpersonal',
+      threshold: 4,
+      bonusDrawCount: 1,
+      description: '【対人】4pt以上でカードドロー +1枚！'
+    }
   },
   {
     id: 12,

@@ -56,6 +56,13 @@ export interface Card4L {
   description?: string;
 }
 
+export interface SkillRequirement {
+  skill: SkillType;
+  threshold: number;
+  bonusDrawCount: number;
+  description: string;
+}
+
 export interface BoardTile {
   id: number;
   name: string;
@@ -66,6 +73,7 @@ export interface BoardTile {
   isSpecialSkillAlloc?: SkillType; // 例: 10番マス柔軟強制
   canChangeCourse?: boolean;       // 例: 9番マスコース変更
   directCubeReward?: boolean;       // 例: 12番マス直獲得
+  skillCondition?: SkillRequirement; // ポータブルスキル条件判定によるドローボーナス
 }
 
 export interface CoOpProject {
