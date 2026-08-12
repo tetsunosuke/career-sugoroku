@@ -92,8 +92,8 @@ export const CardSelectionModal: React.FC<Props> = ({
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                      {card.deck} Deck
+                    <span className="text-xs font-extrabold uppercase px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                      {card.deck === 'work' ? '💼 仕事 (Labor) の山' : card.deck === 'learn' ? '📚 学び (Learn) の山' : '💖 ライフの山'}
                     </span>
                     {isSelected && (
                       <div className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-xs shadow-md">
@@ -101,15 +101,15 @@ export const CardSelectionModal: React.FC<Props> = ({
                       </div>
                     )}
                   </div>
-                  <h3 className="font-bold text-base mt-2 text-slate-100">{card.title}</h3>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">{card.description}</p>
-                </div>
-
-                <div className="mt-4 pt-2.5 border-t border-slate-800 flex flex-wrap gap-2 text-xs font-extrabold">
-                  {card.stats.labor && <span className="text-orange-400">Labor +{card.stats.labor * multiplier}</span>}
-                  {card.stats.learn && <span className="text-purple-400">Learn +{card.stats.learn * multiplier}</span>}
-                  {card.stats.love && <span className="text-pink-400">Love +{card.stats.love * multiplier}</span>}
-                  {card.stats.leisure && <span className="text-emerald-400">Leisure +{card.stats.leisure * multiplier}</span>}
+                  <div className="my-4 text-center py-2 bg-slate-950/40 rounded-lg border border-slate-800">
+                    <span className="text-xs text-slate-400 font-semibold block mb-1">獲得パラメータ</span>
+                    <div className="flex items-center justify-center flex-wrap gap-2 text-sm font-black">
+                      {card.stats.labor && <span className="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">Labor +{card.stats.labor * multiplier}</span>}
+                      {card.stats.learn && <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">Learn +{card.stats.learn * multiplier}</span>}
+                      {card.stats.love && <span className="px-2 py-0.5 rounded bg-pink-500/20 text-pink-400 border border-pink-500/30">Love +{card.stats.love * multiplier}</span>}
+                      {card.stats.leisure && <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Leisure +{card.stats.leisure * multiplier}</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
             );

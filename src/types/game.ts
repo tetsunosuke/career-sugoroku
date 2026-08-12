@@ -50,10 +50,10 @@ export type DeckType = 'work' | 'learn' | 'life' | 'any';
 
 export interface Card4L {
   id: string;
-  title: string;
   deck: DeckType;
   stats: Partial<FourLStats>;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 export interface BoardTile {

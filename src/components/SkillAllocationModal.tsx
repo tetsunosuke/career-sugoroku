@@ -37,10 +37,10 @@ export const SkillAllocationModal: React.FC<Props> = ({
             <Sparkles className="w-4 h-4" /> 意味づけフェーズ (スキル変換)
           </div>
           <h2 className="text-2xl font-bold text-slate-100">
-            経験をポータブルスキルへ変換
+            学び(Learn)をポータブルスキルへ変換
           </h2>
-          <p className="text-xs text-slate-400">
-            獲得した経験ptを、どのポータブルスキルとして意味づけるか選択します。
+          <p className="text-xs text-slate-300">
+            獲得した <strong className="text-purple-300 font-extrabold">Learn {baseSkillPt} pt</strong> を、どのポータブルスキルへ意味づけて変換するか選択します。
           </p>
         </div>
 

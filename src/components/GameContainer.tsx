@@ -117,20 +117,44 @@ export const GameContainer: React.FC = () => {
   const handleConfirmCards = (selectedCards: Card4L[], finalStats: Partial<FourLStats>) => {
     if (!player) return;
 
+    const gainedLabor = finalStats.labor || 0;
+    const gainedLearn = finalStats.learn || 0;
+    const gainedLove = finalStats.love || 0;
+    const gainedLeisure = finalStats.leisure || 0;
+
     const updated4L = {
-      labor: player.stats4L.labor + (finalStats.labor || 0),
-      learn: player.stats4L.learn + (finalStats.learn || 0),
-      love: player.stats4L.love + (finalStats.love || 0),
-      leisure: player.stats4L.leisure + (finalStats.leisure || 0)
+      labor: player.stats4L.labor + gainedLabor,
+      learn: player.stats4L.learn + gainedLearn,
+      love: player.stats4L.love + gainedLove,
+      leisure: player.stats4L.leisure + gainedLeisure
     };
 
     setPlayer({ ...player, stats4L: updated4L });
 
-    const cardTitles = selectedCards.map((c) => c.title).join(' / ');
-    addLog(`経験カード獲得: [${cardTitles}]`, 'card');
+    // ログ記録
+    const statSummary = [
+      gainedLabor > 0 ? `Labor +${gainedLabor}` : '',
+      gainedLearn > 0 ? `Learn +${gainedLearn}` : '',
+      gainedLove > 0 ? `Love +${gainedLove}` : '',
+      gainedLeisure > 0 ? `Leisure +${gainedLeisure}` : ''
+    ].filter(Boolean).join(', ');
 
-    // スキル割り振りフェーズへ
-    setPhase('SKILL_ALLOCATION');
+    addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]`, 'card');
+
+    // 「Learn(学び)」が得られた場合のみ、ポータブルスキル変換フェーズへ進む
+    if (gainedLearn > 0) {
+      setPendingSkillBasePt(gainedLearn);
+      setPhase('SKILL_ALLOCATION');
+    } else {
+      addLog('今回の経験では「学び(Learn)」が得られなかったため、スキル変換は行われませんでした。', 'info');
+      // 9番マスのコース変更特権確認
+      const currentTile = BOARD_TILES[currentPosition];
+      if (currentTile.canChangeCourse) {
+        setCanChangeCourseModal(true);
+      }
+      setTurn((t) => t + 1);
+      setPhase('ROLL');
+    }
   };
 
   // コース変更処理
