@@ -14,7 +14,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="glass-panel w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 md:p-8 space-y-8 text-slate-100 border-indigo-500/30">
+      <div className="glass-panel w-full max-w-4xl max-h-[85vh] overflow-y-auto p-6 md:p-8 space-y-8 text-slate-100 border-indigo-500/30">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold">
             <Sparkles className="w-4 h-4" /> 自律型キャリアシミュレーション
@@ -46,20 +46,30 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                   }`}
                 >
                   <div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <img
                         src={char.avatarUrl}
                         alt={char.name}
-                        className="w-14 h-14 rounded-full object-cover border-2 border-indigo-400/40 shadow-md shrink-0"
+                        style={{
+                          width: '56px',
+                          height: '56px',
+                          minWidth: '56px',
+                          minHeight: '56px',
+                          maxWidth: '56px',
+                          maxHeight: '56px',
+                          borderRadius: '50%',
+                          objectFit: 'cover'
+                        }}
+                        className="border-2 border-indigo-400/50 shadow-md shrink-0 block"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 truncate">
                             {char.riasecType}
                           </span>
                           {isSelected && <CheckCircle2 className="w-5 h-5 text-indigo-400 shrink-0" />}
                         </div>
-                        <h3 className="text-lg font-bold text-slate-100 mt-0.5 truncate">{char.name}</h3>
+                        <h3 className="text-base font-bold text-slate-100 mt-1 truncate">{char.name}</h3>
                       </div>
                     </div>
                     <p className="text-xs text-slate-300 mt-3 line-clamp-2 leading-relaxed">{char.description}</p>

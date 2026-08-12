@@ -43,7 +43,17 @@ export const ResultModal: React.FC<Props> = ({
             <img
               src={character.avatarUrl}
               alt={character.name}
-              className="w-20 h-20 rounded-full object-cover border-4 border-amber-400 shadow-xl shadow-amber-500/30"
+              style={{
+                width: '80px',
+                height: '80px',
+                minWidth: '80px',
+                minHeight: '80px',
+                maxWidth: '80px',
+                maxHeight: '80px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+              className="border-4 border-amber-400 shadow-xl shadow-amber-500/30 block mx-auto"
             />
             <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg">
               <Trophy className="w-5 h-5" />

@@ -32,7 +32,17 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
           <img
             src={character.avatarUrl}
             alt={character.name}
-            className="w-12 h-12 rounded-full object-cover border-2 border-indigo-400 shadow-md shrink-0"
+            style={{
+              width: '48px',
+              height: '48px',
+              minWidth: '48px',
+              minHeight: '48px',
+              maxWidth: '48px',
+              maxHeight: '48px',
+              borderRadius: '50%',
+              objectFit: 'cover'
+            }}
+            className="border-2 border-indigo-400 shadow-md shrink-0 block"
           />
           <div>
             <div className="flex items-center gap-2">
