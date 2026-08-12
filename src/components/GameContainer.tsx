@@ -30,7 +30,7 @@ import { SkillAllocationModal } from './SkillAllocationModal';
 import { ProjectsPanel } from './ProjectsPanel';
 import { LogPanel } from './LogPanel';
 import { ResultModal } from './ResultModal';
-import { RefreshCw, Sparkles } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 export const GameContainer: React.FC = () => {
   const [phase, setPhase] = useState<GamePhase>('SETUP');
@@ -40,6 +40,7 @@ export const GameContainer: React.FC = () => {
   const [logs, setLogs] = useState<GameLog[]>([]);
 
   // ドロー＆割り振り用の一時ステート
+  const [currentPosition, setCurrentPosition] = useState<number>(0);
   const [drawnCards, setDrawnCards] = useState<Card4L[]>([]);
   const [currentDrawParams, setCurrentDrawParams] = useState<{ selectCount: number; multiplier: number }>({ selectCount: 1, multiplier: 1 });
   const [pendingSkillBasePt, setPendingSkillBasePt] = useState<number>(0);
@@ -55,6 +56,7 @@ export const GameContainer: React.FC = () => {
   const handleStartGame = (char: Character, gen: GenerationConfig, course: CourseConfig) => {
     const newPlayer = createInitialPlayer(char, gen, course);
     setPlayer(newPlayer);
+    setCurrentPosition(0);
     setPhase('ROLL');
     setTurn(1);
     setLogs([]);
@@ -65,15 +67,15 @@ export const GameContainer: React.FC = () => {
   const handleRollDice = (diceVal: number) => {
     if (!player) return;
 
-    const nextPos = Math.min(12, player.position + diceVal);
+    const nextPos = Math.min(12, currentPosition + diceVal);
     const tile = BOARD_TILES[nextPos];
 
+    setCurrentPosition(nextPos);
     setPlayer({ ...player, position: nextPos });
     addLog(`ダイスの出目 [${diceVal}] でマス #${nextPos}「${tile.name}」へ移動しました。`, 'move');
 
     // 12番マス（ゴール）到達判定
     if (nextPos === 12) {
-      // 12番マス直獲得（全4Lから好きなの＋1）
       setPlayer((prev) => {
         if (!prev) return prev;
         return {
@@ -95,7 +97,7 @@ export const GameContainer: React.FC = () => {
     // 2. 経験実行フェーズ (ドロー準備)
     let targetDeck: DeckType = 'work';
     if (tile.deck === 'choice') {
-      targetDeck = 'any'; // 選択マスはランダム全山札から抽出
+      targetDeck = 'any';
     } else {
       targetDeck = tile.deck;
     }
@@ -128,7 +130,7 @@ export const GameContainer: React.FC = () => {
     addLog(`経験カード獲得: [${cardTitles}]`, 'card');
 
     // 9番マスのコース変更特権確認
-    const currentTile = BOARD_TILES[player.position];
+    const currentTile = BOARD_TILES[currentPosition];
     if (currentTile.canChangeCourse) {
       setCanChangeCourseModal(true);
     }
@@ -174,7 +176,6 @@ export const GameContainer: React.FC = () => {
   const handleCompleteProject = (proj: CoOpProject) => {
     if (!player) return;
 
-    // 特権: ダイキ (CHAR_E) は獲得4Lが全項目 +1
     const isDaiki = player.character.id === 'CHAR_E';
     const bonus = isDaiki ? 1 : 0;
 
@@ -237,7 +238,7 @@ export const GameContainer: React.FC = () => {
           {/* 中段: 2カラムグリッド (すごろく盤面 & ステータス) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
-              <Board currentPosition={player.position} />
+              <Board currentPosition={currentPosition} />
               <ProjectsPanel
                 projects={projects}
                 skills={player.skills}
@@ -278,7 +279,7 @@ export const GameContainer: React.FC = () => {
 
       {/* 副業コース変更ダイアログ (9番マス通過時) */}
       {canChangeCourseModal && player && (
-        <div className="modal-overlay">
+        <div className="modal-overlay z-[110]">
           <div className="glass-panel p-6 max-w-md w-full space-y-4 text-center">
             <h3 className="text-lg font-bold text-indigo-300">✨ 副業・プロボノの成果！</h3>
             <p className="text-xs text-slate-300">
