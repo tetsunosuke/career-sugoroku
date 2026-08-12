@@ -26,6 +26,7 @@ import { SetupModal } from './SetupModal';
 import { StatusPanel } from './StatusPanel';
 import { Board } from './Board';
 import { DiceRoller } from './DiceRoller';
+import { TileArrivalModal } from './TileArrivalModal';
 import { CardSelectionModal } from './CardSelectionModal';
 import { SkillAllocationModal } from './SkillAllocationModal';
 import { ProjectsPanel } from './ProjectsPanel';
@@ -95,7 +96,7 @@ export const GameContainer: React.FC = () => {
       return;
     }
 
-    // 2. 経験実行フェーズ (ドロー準備)
+    // 2. マス到着・ドロー準備フェーズ (TILE_ARRIVAL)
     let targetDeck: DeckType = 'work';
     if (tile.deck === 'choice') {
       targetDeck = 'any';
@@ -122,6 +123,12 @@ export const GameContainer: React.FC = () => {
     setPendingSkillBasePt(tile.skillPt);
     setForcedSkill(tile.isSpecialSkillAlloc);
 
+    // マス拡大説明表示フェーズへ移行
+    setPhase('TILE_ARRIVAL');
+  };
+
+  // マス拡大説明から山札ドロー実行
+  const handleStartDraw = () => {
     setPhase('DRAW_SELECTION');
   };
 
@@ -302,6 +309,18 @@ export const GameContainer: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* マス到着・拡大説明ダイアログ */}
+      {phase === 'TILE_ARRIVAL' && player && (
+        <TileArrivalModal
+          tile={BOARD_TILES[currentPosition]}
+          skills={player.skills}
+          drawCount={drawnCards.length}
+          skillBonusApplied={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).skillBonusApplied}
+          skillBonusText={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).skillBonusText}
+          onDrawCards={handleStartDraw}
+        />
       )}
 
       {/* 4Lカードドローダイアログ */}

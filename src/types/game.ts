@@ -89,6 +89,7 @@ export type GamePhase =
   | 'SETUP'
   | 'ROLL'
   | 'MOVING'
+  | 'TILE_ARRIVAL'
   | 'DRAW_SELECTION'
   | 'SKILL_ALLOCATION'
   | 'PROJECT_CHECK'

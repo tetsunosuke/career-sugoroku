@@ -74,13 +74,29 @@ export const CardSelectionModal: React.FC<Props> = ({
         </div>
 
         {/* 今回獲得できる合計パラメータサマリー */}
-        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center space-y-1.5">
-          <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">獲得パラメータ合計</span>
-          <div className="flex items-center justify-center flex-wrap gap-3 text-sm font-black">
-            {accumulated.labor ? <span className="text-orange-400">Labor +{accumulated.labor}</span> : null}
-            {accumulated.learn ? <span className="text-purple-300">Learn +{accumulated.learn}</span> : null}
-            {accumulated.love ? <span className="text-pink-400">Love +{accumulated.love}</span> : null}
-            {accumulated.leisure ? <span className="text-emerald-400">Leisure +{accumulated.leisure}</span> : null}
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-slate-900 to-slate-950 border border-indigo-500/30 text-center space-y-2">
+          <span className="text-xs text-indigo-300 font-extrabold uppercase tracking-wider block">
+            🎯 今回のマスで獲得したスコア (4Lパラメータ)
+          </span>
+          <div className="flex items-center justify-center flex-wrap gap-3 text-base font-black py-1">
+            {accumulated.labor ? <span className="px-3 py-1 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">Labor +{accumulated.labor}</span> : null}
+            {accumulated.learn ? <span className="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">Learn +{accumulated.learn}</span> : null}
+            {accumulated.love ? <span className="px-3 py-1 rounded-lg bg-pink-500/20 text-pink-400 border border-pink-500/30">Love +{accumulated.love}</span> : null}
+            {accumulated.leisure ? <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Leisure +{accumulated.leisure}</span> : null}
+          </div>
+
+          {/* スキル成長の影響についての説明 */}
+          <div className="pt-2 border-t border-slate-800 text-left text-xs space-y-1">
+            {accumulated.labor ? (
+              <p className="text-amber-300 font-semibold flex items-center gap-1">
+                ⚡ 現場での実践(Labor)獲得！ いずれかのポータブルスキルがランダムで +1 偶発的成長します。
+              </p>
+            ) : null}
+            {accumulated.learn ? (
+              <p className="text-purple-300 font-semibold flex items-center gap-1">
+                💡 学び(Learn +{accumulated.learn})獲得！ 次の画面でポータブルスキルへ手動変換・意味づけできます。
+              </p>
+            ) : null}
           </div>
         </div>
 
