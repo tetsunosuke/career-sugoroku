@@ -16,11 +16,11 @@ export const DiceRoller: React.FC<Props> = ({ onRoll, disabled }) => {
 
     let rollCount = 0;
     const interval = setInterval(() => {
-      setLastValue(Math.floor(Math.random() * 3) + 1);
+      setLastValue(Math.floor(Math.random() * 2) + 1);
       rollCount++;
       if (rollCount >= 10) {
         clearInterval(interval);
-        const finalVal = Math.floor(Math.random() * 3) + 1;
+        const finalVal = Math.floor(Math.random() * 2) + 1;
         setLastValue(finalVal);
         setIsRolling(false);
         onRoll(finalVal);
@@ -39,7 +39,7 @@ export const DiceRoller: React.FC<Props> = ({ onRoll, disabled }) => {
           {lastValue !== null ? lastValue : <Dices className="w-7 h-7" />}
         </div>
         <div>
-          <h3 className="font-bold text-sm text-slate-100">移動ダイス (出目 1 〜 3)</h3>
+          <h3 className="font-bold text-sm text-slate-100">移動ダイス (出目 1 〜 2)</h3>
           <p className="text-xs text-slate-400">ダイスを振ってキャリアの歩みを進めます。</p>
         </div>
       </div>

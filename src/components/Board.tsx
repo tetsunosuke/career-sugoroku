@@ -27,7 +27,7 @@ export const Board: React.FC<Props> = ({ currentPosition }) => {
           const isVisited = tile.id < currentPosition;
           const isRevealed = tile.id <= currentPosition; // 到着済み or 現在地
           const isGoal = tile.id === 12;
-          const isNextFew = tile.id > currentPosition && tile.id <= currentPosition + 3;
+          const isNextFew = tile.id > currentPosition && tile.id <= currentPosition + 2;
 
           // --- 未到達マス: 裏面表示 ---
           if (!isRevealed) {
