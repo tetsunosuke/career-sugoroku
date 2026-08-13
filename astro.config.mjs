@@ -7,5 +7,13 @@ export default defineConfig({
   integrations: [
     react(),
     tailwind()
-  ]
+  ],
+  vite: {
+    server: {
+      watch: {
+        usePolling: true,
+        interval: 100
+      }
+    }
+  }
 });
