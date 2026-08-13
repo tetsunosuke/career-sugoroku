@@ -163,7 +163,6 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 次へ：年代を選択 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
-            </div>
           </div>
         )}
 
