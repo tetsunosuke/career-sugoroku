@@ -301,12 +301,7 @@ export const GameContainer: React.FC = () => {
     setPlayer({
       ...player,
       stats4L: updated4L,
-      skills: updatedSkills,
-      money: Math.max(0, player.money + cardMoneyDiff),
-      health: {
-        ...player.health,
-        current: Math.max(0, Math.min(player.health.max, player.health.current + cardHealthDiff))
-      }
+      skills: updatedSkills
     });
 
     // ② Learn(学び)が得られた場合のみ、ポータブルスキル手動変換フェーズへ進む
