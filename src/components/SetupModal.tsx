@@ -68,8 +68,18 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
       <div className="glass-panel w-full max-w-3xl max-h-[85vh] overflow-y-auto p-6 md:p-8 text-slate-100 border-indigo-500/30">
         {/* 共通タイトル */}
         <div className="text-center space-y-2 mb-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold">
-            <Sparkles className="w-4 h-4" /> 自律型キャリアシミュレーション
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-1">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold">
+              <Sparkles className="w-4 h-4" /> 自律型キャリアシミュレーション
+            </div>
+            <a
+              href="/rules"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-300 text-xs font-semibold transition-colors"
+            >
+              📖 ルール・解説を見る
+            </a>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
             『キャリアすごろく』

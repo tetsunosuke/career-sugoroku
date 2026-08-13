@@ -3,21 +3,21 @@ import type { Character, GenerationConfig, CourseConfig } from '../types/game';
 export const CHARACTERS: Character[] = [
   {
     id: 'CHAR_R',
-    name: 'タクミ',
+    name: 'リキヤ',
     riasecType: 'R（現実的）',
     favoredSkill: 'execution',
     description: '現場での即戦力と実務遂行能力に優れる技術思考スペシャリスト。',
     perkText: '「実行」スキル獲得時、ポイント1.5倍（端数切り捨て）',
-    avatarUrl: '/images/takumi.jpg'
+    avatarUrl: '/images/rikiya.jpg'
   },
   {
     id: 'CHAR_I',
-    name: 'サクラ',
+    name: 'イオリ',
     riasecType: 'I（研究的）',
     favoredSkill: 'thinking',
     description: '本質を問い、緻密な構造化と課題発見を得意とするアナリスト。',
     perkText: '「思考」スキル獲得時、ポイント1.5倍（端数切り捨て）',
-    avatarUrl: '/images/sakura.jpg'
+    avatarUrl: '/images/iori.jpg'
   },
   {
     id: 'CHAR_A',
@@ -30,28 +30,28 @@ export const CHARACTERS: Character[] = [
   },
   {
     id: 'CHAR_S',
-    name: 'カレン',
+    name: 'ソウタ',
     riasecType: 'S（社会的）',
     favoredSkill: 'interpersonal',
     description: '他者の感情に寄り添い、信頼と巻き込みで協働を促すファシリテーター。',
     perkText: '「対人」スキル獲得時、ポイント1.5倍（端数切り捨て）',
-    avatarUrl: '/images/karen.jpg'
+    avatarUrl: '/images/sota.jpg'
   },
   {
     id: 'CHAR_E',
-    name: 'ダイキ',
+    name: 'エイジ',
     riasecType: 'E（企業的）',
     description: '事業の機会を見出し、人を巻き込んで価値を生み出すアントレプレナー。',
     perkText: '協力プロジェクト達成時、獲得4Lが全項目 +1',
-    avatarUrl: '/images/daiki.jpg'
+    avatarUrl: '/images/eiji.jpg'
   },
   {
     id: 'CHAR_C',
-    name: 'リツコ',
+    name: 'チヒロ',
     riasecType: 'C（慣習的）',
     description: '確実で無駄のないプロセスとリスク管理で組織を安定させるスペシャリスト。',
     perkText: '4Lからスキルへの変換効率補正（スキル割り振りに+1ボーナス）',
-    avatarUrl: '/images/ritsuko.jpg'
+    avatarUrl: '/images/chihiro.jpg'
   }
 ];
 

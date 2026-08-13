@@ -22,6 +22,8 @@ import {
   getRandomSkill
 } from '../logic/gameEngine';
 
+import { HeaderNav } from './HeaderNav';
+import { GuideContent } from './GuideContent';
 import { SetupModal } from './SetupModal';
 import { StatusPanel } from './StatusPanel';
 import { Board } from './Board';
@@ -32,7 +34,7 @@ import { SkillAllocationModal } from './SkillAllocationModal';
 import { ProjectsPanel } from './ProjectsPanel';
 import { LogPanel } from './LogPanel';
 import { ResultModal } from './ResultModal';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, BookOpen, GraduationCap } from 'lucide-react';
 
 export const GameContainer: React.FC = () => {
   const [phase, setPhase] = useState<GamePhase>('SETUP');
@@ -40,6 +42,7 @@ export const GameContainer: React.FC = () => {
   const [turn, setTurn] = useState<number>(1);
   const [projects, setProjects] = useState<CoOpProject[]>(COOP_PROJECTS);
   const [logs, setLogs] = useState<GameLog[]>([]);
+  const [guideModalTab, setGuideModalTab] = useState<'rules' | 'theory' | null>(null);
 
   // ドロー＆割り振り用の一時ステート
   const [currentPosition, setCurrentPosition] = useState<number>(0);
@@ -261,7 +264,7 @@ export const GameContainer: React.FC = () => {
       <header className="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 border-slate-700/50">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-extrabold text-white shadow-lg">
-            キャリア
+            🎲
           </div>
           <div>
             <h1 className="text-xl font-black bg-gradient-to-r from-indigo-300 via-purple-200 to-pink-300 bg-clip-text text-transparent">
@@ -271,12 +274,26 @@ export const GameContainer: React.FC = () => {
           </div>
         </div>
 
-        <button
-          onClick={() => setPhase('SETUP')}
-          className="px-4 py-2 rounded-lg text-xs font-bold text-slate-300 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5 transition-all"
-        >
-          <RefreshCw className="w-3.5 h-3.5" /> 最初からやり直す
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => setGuideModalTab('rules')}
+            className="px-3 py-2 rounded-lg text-xs font-bold text-slate-300 bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-500/40 flex items-center gap-1.5 transition-all"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-indigo-400" /> ルールガイド
+          </button>
+          <button
+            onClick={() => setGuideModalTab('theory')}
+            className="px-3 py-2 rounded-lg text-xs font-bold text-slate-300 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 flex items-center gap-1.5 transition-all"
+          >
+            <GraduationCap className="w-3.5 h-3.5 text-purple-400" /> キャリア理論解説
+          </button>
+          <button
+            onClick={() => setPhase('SETUP')}
+            className="px-3 py-2 rounded-lg text-xs font-bold text-slate-300 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5 transition-all"
+          >
+            <RefreshCw className="w-3.5 h-3.5" /> 最初からやり直す
+          </button>
+        </div>
       </header>
 
       {/* セットアップダイアログ */}
@@ -387,6 +404,19 @@ export const GameContainer: React.FC = () => {
           logs={logs}
           onRestart={() => setPhase('SETUP')}
         />
+      )}
+
+      {/* ガイドブック / キャリア理論モーダル */}
+      {guideModalTab && (
+        <div className="modal-overlay z-[150] overflow-y-auto py-8">
+          <div className="bg-slate-950/95 border border-white/10 p-6 sm:p-8 rounded-3xl max-w-5xl w-full shadow-2xl my-auto">
+            <GuideContent
+              initialTab={guideModalTab}
+              isModalView={true}
+              onClose={() => setGuideModalTab(null)}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

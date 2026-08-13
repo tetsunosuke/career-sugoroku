@@ -43,7 +43,7 @@ export function computeSkillPoints(
     pt += 1;
   }
 
-  // CHAR_C (リツコ) の変換補正
+  // CHAR_C (チヒロ) の変換補正
   if (character.id === 'CHAR_C') {
     pt += 1;
   }
