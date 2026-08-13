@@ -13,8 +13,12 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
   const [step, setStep] = useState<SetupStep>('character');
   const [selectedChar, setSelectedChar] = useState<Character | null>(null);
   const [previewChar, setPreviewChar] = useState<Character | null>(null);
+
   const [selectedGen, setSelectedGen] = useState<GenerationConfig | null>(null);
+  const [previewGen, setPreviewGen] = useState<GenerationConfig | null>(null);
+
   const [selectedCourse, setSelectedCourse] = useState<CourseConfig | null>(null);
+  const [previewCourse, setPreviewCourse] = useState<CourseConfig | null>(null);
 
   const handleCharacterNext = () => {
     if (selectedChar) setStep('generation');
@@ -30,9 +34,23 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
     if (selectedGen) setStep('course');
   };
 
+  const handleSelectPreviewGen = (gen: GenerationConfig) => {
+    setSelectedGen(gen);
+    setPreviewGen(null);
+    setStep('course');
+  };
+
   const handleCourseConfirm = () => {
     if (selectedChar && selectedGen && selectedCourse) {
       onStart(selectedChar, selectedGen, selectedCourse);
+    }
+  };
+
+  const handleSelectPreviewCourse = (course: CourseConfig) => {
+    setSelectedCourse(course);
+    setPreviewCourse(null);
+    if (selectedChar && selectedGen) {
+      onStart(selectedChar, selectedGen, course);
     }
   };
 
@@ -198,32 +216,40 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 return (
                   <div
                     key={gen.id}
-                    onClick={() => setSelectedGen(gen)}
-                    className={`cursor-pointer p-5 rounded-xl border transition-all duration-200 glass-panel-interactive ${
+                    onClick={() => {
+                      setSelectedGen(gen);
+                      setPreviewGen(gen);
+                    }}
+                    className={`cursor-pointer p-5 rounded-xl border transition-all duration-200 glass-panel-interactive flex flex-col justify-between ${
                       isSelected
                         ? 'border-purple-500 bg-purple-950/40 ring-2 ring-purple-500/50 shadow-lg shadow-purple-500/10 scale-[1.02]'
                         : 'border-slate-700/60 bg-slate-900/40 opacity-80 hover:opacity-100'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-base">{gen.name}</h3>
-                      {isSelected && <CheckCircle2 className="w-5 h-5 text-purple-400" />}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-bold text-base">{gen.name}</h3>
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />}
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">{gen.drawRuleText}</p>
+                      <div className="mt-3 pt-2 border-t border-slate-700/50 text-xs text-slate-400 space-y-1">
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                          <span className="text-orange-400">Labor: {gen.initial4L.labor}</span>
+                          <span className="text-purple-400">Learn: {gen.initial4L.learn}</span>
+                          <span className="text-pink-400">Love: {gen.initial4L.love}</span>
+                          <span className="text-emerald-400">Leisure: {gen.initial4L.leisure}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-slate-400">
+                          <span className="text-slate-300 font-semibold">初期スキル:</span>
+                          <span>対人:{gen.initialSkills.interpersonal}</span>
+                          <span>思考:{gen.initialSkills.thinking}</span>
+                          <span>実行:{gen.initialSkills.execution}</span>
+                          <span>柔軟:{gen.initialSkills.flexibility}</span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{gen.drawRuleText}</p>
-                    <div className="mt-3 pt-2 border-t border-slate-700/50 text-xs text-slate-400 space-y-1">
-                      <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-                        <span className="text-orange-400">Labor: {gen.initial4L.labor}</span>
-                        <span className="text-purple-400">Learn: {gen.initial4L.learn}</span>
-                        <span className="text-pink-400">Love: {gen.initial4L.love}</span>
-                        <span className="text-emerald-400">Leisure: {gen.initial4L.leisure}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-slate-400">
-                        <span className="text-slate-300 font-semibold">初期スキル:</span>
-                        <span>対人:{gen.initialSkills.interpersonal}</span>
-                        <span>思考:{gen.initialSkills.thinking}</span>
-                        <span>実行:{gen.initialSkills.execution}</span>
-                        <span>柔軟:{gen.initialSkills.flexibility}</span>
-                      </div>
+                    <div className="mt-3 pt-2 border-t border-slate-800 text-[10px] text-purple-300 font-bold flex justify-end">
+                      <span>🔍 拡大して詳細を見る</span>
                     </div>
                   </div>
                 );
@@ -286,18 +312,26 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 return (
                   <div
                     key={course.id}
-                    onClick={() => setSelectedCourse(course)}
-                    className={`cursor-pointer p-5 rounded-xl border transition-all duration-200 glass-panel-interactive ${
+                    onClick={() => {
+                      setSelectedCourse(course);
+                      setPreviewCourse(course);
+                    }}
+                    className={`cursor-pointer p-5 rounded-xl border transition-all duration-200 glass-panel-interactive flex flex-col justify-between ${
                       isSelected
                         ? 'border-pink-500 bg-pink-950/40 ring-2 ring-pink-500/50 shadow-lg shadow-pink-500/10 scale-[1.02]'
                         : 'border-slate-700/60 bg-slate-900/40 opacity-80 hover:opacity-100'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-lg">{course.name}</h3>
-                      {isSelected && <CheckCircle2 className="w-5 h-5 text-pink-400" />}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-bold text-lg">{course.name}</h3>
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-pink-400 shrink-0" />}
+                      </div>
+                      <p className="text-sm text-slate-300 leading-relaxed">{course.description}</p>
                     </div>
-                    <p className="text-sm text-slate-300 leading-relaxed">{course.description}</p>
+                    <div className="mt-4 pt-2 border-t border-slate-800 text-[10px] text-pink-300 font-bold flex justify-end">
+                      <span>🔍 拡大して詳細を見る</span>
+                    </div>
                   </div>
                 );
               })}
@@ -389,6 +423,137 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 ← 他のキャラクターを見る
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* 年代拡大表示・詳細確認モーダル */}
+      {previewGen && (
+        <div className="modal-overlay z-[140] animate-fadeIn p-4">
+          <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-purple-500/50 shadow-2xl bg-slate-950/95 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold">
+                <Calendar className="w-4 h-4" /> 年代ステージ詳細
+              </div>
+              <h2 className="text-2xl font-black text-white">{previewGen.name}</h2>
+            </div>
+
+            {/* ドロー＆カードルール */}
+            <div className="space-y-2 bg-slate-900/80 p-4 rounded-2xl border border-white/10">
+              <span className="text-xs font-bold text-purple-300 block uppercase tracking-wider">
+                🎴 イベントカードドロー＆選択ルール
+              </span>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                {previewGen.drawRuleText}
+              </p>
+            </div>
+
+            {/* 初期リソースサマリー */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 rounded-xl bg-orange-950/30 border border-orange-500/30">
+                <span className="text-[11px] font-bold text-orange-400 block">💎 初期4Lリソース</span>
+                <div className="text-xs font-bold text-slate-200 space-x-1.5 mt-0.5">
+                  <span>L:{previewGen.initial4L.labor}</span>
+                  <span>L:{previewGen.initial4L.learn}</span>
+                  <span>L:{previewGen.initial4L.love}</span>
+                  <span>L:{previewGen.initial4L.leisure}</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30">
+                <span className="text-[11px] font-bold text-cyan-400 block">⚡ 初期ポータブルスキル</span>
+                <div className="text-[11px] font-semibold text-slate-200 space-x-1 mt-0.5">
+                  <span>対人{previewGen.initialSkills.interpersonal}</span>
+                  <span>思考{previewGen.initialSkills.thinking}</span>
+                  <span>実行{previewGen.initialSkills.execution}</span>
+                  <span>柔軟{previewGen.initialSkills.flexibility}</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30">
+                <span className="text-[11px] font-bold text-amber-400 block">💰 スタート時資金</span>
+                <span className="text-base font-black text-amber-200">{(previewGen as any).initialMoney ?? 20} 万円</span>
+              </div>
+              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
+                <span className="text-[11px] font-bold text-emerald-400 block">❤️ スタート時体力</span>
+                <span className="text-base font-black text-emerald-200">{(previewGen as any).initialHealth?.current ?? 100} HP</span>
+              </div>
+            </div>
+
+            {/* 決定 / キャンセルボタン */}
+            <div className="pt-2 space-y-2">
+              <button
+                onClick={() => handleSelectPreviewGen(previewGen)}
+                className="w-full py-3.5 rounded-xl font-bold text-base text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-xl shadow-purple-600/30 transition-all flex items-center justify-center gap-2"
+              >
+                【{previewGen.name}】で決定して次へ <ArrowRight className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setPreviewGen(null)}
+                className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                ← 他の年代を見る
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* コース拡大表示・詳細確認モーダル */}
+      {previewCourse && (
+        <div className="modal-overlay z-[140] animate-fadeIn p-4">
+          <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-pink-500/50 shadow-2xl bg-slate-950/95 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold">
+                <Briefcase className="w-4 h-4" /> キャリア環境コース
+              </div>
+              <h2 className="text-2xl font-black text-white">{previewCourse.name}</h2>
+            </div>
+
+            {/* コース詳細説明 */}
+            <div className="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10">
+              <span className="text-xs font-bold text-pink-300 block uppercase tracking-wider">
+                🏢 所属コースの特徴と成長機会
+              </span>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                {previewCourse.description}
+              </p>
+            </div>
+
+            {/* 特徴ハイライト */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-pink-950/40 to-indigo-950/40 border border-pink-500/30 space-y-2 text-xs text-slate-200">
+              <span className="font-extrabold text-pink-300 block">✨ コース環境効果</span>
+              {previewCourse.id === 'venture' ? (
+                <ul className="space-y-1 list-disc list-inside text-amber-200 font-semibold">
+                  <li>マス移動時、獲得スキルポイント +1pt 加算</li>
+                  <li>成果報酬の資金が高い（仕事・PJで大きく稼げる）</li>
+                  <li>スピード感ある環境のため移動時の体力消費が大きめ</li>
+                </ul>
+              ) : (
+                <ul className="space-y-1 list-disc list-inside text-emerald-200 font-semibold">
+                  <li>「学び」カード獲得時のドロー枚数 +1枚</li>
+                  <li>福利厚生充実（毎ターン体力 +5 HP 自動回復）</li>
+                  <li>毎ターンの安定した基本給手当を獲得</li>
+                </ul>
+              )}
+            </div>
+
+            {/* 決定 / キャンセルボタン */}
+            <div className="pt-2 space-y-2">
+              <button
+                onClick={() => handleSelectPreviewCourse(previewCourse)}
+                className="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-pink-600/30 transition-all flex items-center justify-center gap-2"
+              >
+                キャリアシミュレーションを開始する 🚀
+              </button>
+              <button
+                onClick={() => setPreviewCourse(null)}
+                className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                ← 他のコースを見る
               </button>
             </div>
           </div>
