@@ -21,7 +21,8 @@ import {
   getDeckCards,
   getDrawCount,
   getRandomSkill,
-  computeGoalAchievement
+  computeGoalAchievement,
+  computeSkillPoints
 } from '../logic/gameEngine';
 
 import { HeaderNav } from './HeaderNav';
