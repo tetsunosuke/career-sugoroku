@@ -330,15 +330,20 @@ export const GameContainer: React.FC = () => {
       skills: updatedSkills
     });
 
-    // ② Learn(学び)が得られた場合のみ、ポータブルスキル手動変換フェーズへ進む
-    if (gainedLearn > 0) {
-      setPendingSkillBasePt(gainedLearn);
+    // ② マスの確定基礎スキルpt (tile.skillPt) と Learnカードpt (gainedLearn) を合算
+    const currentTile = BOARD_TILES[currentPosition];
+    const tileBaseSkillPt = currentTile?.skillPt || 0;
+    const totalSkillBasePt = tileBaseSkillPt + gainedLearn;
+
+    if (totalSkillBasePt > 0 || currentTile?.isSpecialSkillAlloc) {
+      setPendingSkillBasePt(totalSkillBasePt);
+      setForcedSkill(currentTile?.isSpecialSkillAlloc);
+      addLog(`✨ スキル配分フェーズ: 【マスの確定スキル: +${tileBaseSkillPt}pt】 + 【Learn獲得: +${gainedLearn}pt】 = 計 ${totalSkillBasePt} pt を配分します。`, 'skill');
       setPhase('SKILL_ALLOCATION');
     } else {
-      addLog('今回の経験では「学び(Learn)」が得られなかったため、主体的スキル変換はスキップされました。', 'info');
+      addLog('今回のマスと経験ではスキルポイントが得られなかったため、スキル配分はスキップされました。', 'info');
       // 9番マスのコース変更特権確認
-      const currentTile = BOARD_TILES[currentPosition];
-      if (currentTile.canChangeCourse) {
+      if (currentTile?.canChangeCourse) {
         setCanChangeCourseModal(true);
       }
       setTurn((t) => t + 1);
