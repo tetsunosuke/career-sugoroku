@@ -9,7 +9,8 @@ export interface RadarAxis {
 interface RadarChartProps {
   size?: number;
   max?: number;
-  axes: [RadarAxis, RadarAxis, RadarAxis, RadarAxis];
+  axes?: [RadarAxis, RadarAxis, RadarAxis, RadarAxis] | RadarAxis[];
+  stats?: { labor: number; learn: number; love: number; leisure: number };
   gradientId?: string;
   fillColor?: string;
   strokeColor?: string;
@@ -17,14 +18,27 @@ interface RadarChartProps {
 
 export const RadarChart: React.FC<RadarChartProps> = ({
   size = 200,
-  max = 5,
+  max = 15,
   axes,
+  stats,
   gradientId = 'radarGrad',
   fillColor = '#a855f7',
   strokeColor = '#c084fc'
 }) => {
   const center = size / 2;
   const radius = center * 0.65;
+
+  const activeAxes: RadarAxis[] = axes || (stats ? [
+    { label: 'Labor', value: stats.labor, color: '#f97316' },
+    { label: 'Learn', value: stats.learn, color: '#a855f7' },
+    { label: 'Love', value: stats.love, color: '#ec4899' },
+    { label: 'Leisure', value: stats.leisure, color: '#10b981' }
+  ] : [
+    { label: 'Labor', value: 0, color: '#f97316' },
+    { label: 'Learn', value: 0, color: '#a855f7' },
+    { label: 'Love', value: 0, color: '#ec4899' },
+    { label: 'Leisure', value: 0, color: '#10b981' }
+  ]);
 
   const getPoint = (val: number, angleDeg: number) => {
     const ratio = Math.min(val, max) / max;
@@ -37,7 +51,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({
 
   const angles = [0, 90, 180, 270];
 
-  const pts = axes.map((axis, i) => getPoint(axis.value, angles[i]));
+  const pts = activeAxes.map((axis, i) => getPoint(axis.value, angles[i]));
   const polyPoints = pts.map((p) => `${p.x},${p.y}`).join(' ');
 
   const guides = [0.25, 0.5, 0.75, 1];
@@ -103,14 +117,14 @@ export const RadarChart: React.FC<RadarChartProps> = ({
           cx={p.x}
           cy={p.y}
           r={size > 180 ? 4 : 3}
-          fill={axes[i].color}
+          fill={activeAxes[i]?.color || '#ffffff'}
           stroke="#0b0f19"
           strokeWidth="1.5"
         />
       ))}
 
       {/* 軸ラベル */}
-      {axes.map((a, i) => {
+      {activeAxes.map((a, i) => {
         const pt = getPoint(max + (size > 180 ? 0.9 : 0.8), angles[i]);
         return (
           <text
