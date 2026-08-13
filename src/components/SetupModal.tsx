@@ -122,7 +122,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
             </a>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
-            『キャリアすごろく』
+            『キャリア・キルト・クエスト』
           </h1>
         </div>
 

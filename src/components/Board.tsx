@@ -25,7 +25,7 @@ export const Board: React.FC<Props> = ({ currentPosition }) => {
     <div className="glass-panel p-5 sm:p-6 space-y-5 border-slate-700/50 relative overflow-hidden">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-          <Compass className="w-5 h-5 text-indigo-400" /> キャリアすごろく盤面 (S字進行マップ)
+          <Compass className="w-5 h-5 text-indigo-400" /> キャリア・キルト・クエスト盤面 (S字進行マップ)
         </h2>
         <div className="text-xs text-slate-400 flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>

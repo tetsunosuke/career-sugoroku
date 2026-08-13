@@ -342,7 +342,7 @@ export const GuideContent: React.FC<GuideContentProps> = ({
           <div className="glass-panel p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-purple-950/40 via-indigo-950/20 to-slate-900 border border-purple-500/30 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
             <h2 className="text-2xl sm:text-3xl font-black text-white mb-3 flex items-center gap-3">
-              <span>🎓</span> キャリアすごろくを支える4つのキャリア理論
+              <span>🎓</span> キャリア・キルト・クエストを支える5つのキャリア理論
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
               本ゲームは、現代のキャリア開発・学術研究で重視される主要なキャリア理論に基づき設計されています。「偶発性を味方につける」「仕事以外を含むライフキャリアの統合」「個性の自己理解」「持ち運び可能な汎用スキル」を楽しく体験・理解することができます。
