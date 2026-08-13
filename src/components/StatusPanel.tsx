@@ -135,7 +135,7 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
       <div className="space-y-3 pt-2">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
           <span>ポータブルスキル (汎用能力)</span>
-          <span className="text-[10px] text-amber-300/80 font-normal">✨=得点1.5倍補正対象</span>
+          <span className="text-[10px] text-amber-300/80 font-normal">✨=得点+1ボーナス対象</span>
         </h3>
         <div className="space-y-2.5">
           {skillConfig.map((sk) => {

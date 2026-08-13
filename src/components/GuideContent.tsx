@@ -95,16 +95,16 @@ export const GuideContent: React.FC<GuideContentProps> = ({
               👤 6人のキャラクター（RIASECタイプ）
             </h3>
             <p className="text-sm text-slate-300">
-              プレイヤーはホランドのRIASEC特性に基づく6人のキャラクターから1名を選択します。それぞれ固有の得意スキルやパッシブスキル（1.5倍補正等）を持っています。
+              プレイヤーはホランドのRIASEC特性に基づく6人のキャラクターから1名を選択します。それぞれ固有の得意スキルやパッシブスキル（+1ボーナス等）を持っています。
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { type: 'R（現実的）', name: 'リキヤ', favored: '実行スキル', perk: '「実行」スキル獲得時、ポイント1.5倍（端数切捨）', icon: '🛠️', color: 'border-yellow-500/40 bg-yellow-950/10' },
-                { type: 'I（研究的）', name: 'イオリ', favored: '思考スキル', perk: '「思考」スキル獲得時、ポイント1.5倍（端数切捨）', icon: '🔍', color: 'border-cyan-500/40 bg-cyan-950/10' },
-                { type: 'A（芸術的）', name: 'アオイ', favored: '柔軟スキル', perk: '「柔軟」スキル獲得時、ポイント1.5倍（端数切捨）', icon: '🎨', color: 'border-purple-500/40 bg-purple-950/10' },
-                { type: 'S（社会的）', name: 'ソウタ', favored: '対人スキル', perk: '「対人」スキル獲得時、ポイント1.5倍（端数切捨）', icon: '🤝', color: 'border-blue-500/40 bg-blue-950/10' },
-                { type: 'E（企業的）', name: 'エイジ', favored: 'プロジェクト推進', perk: '協力プロジェクト達成時、獲得4Lが全項目 +1', icon: '🚀', color: 'border-red-500/40 bg-red-950/10' },
-                { type: 'C（慣習的）', name: 'チヒロ', favored: 'プロセス・効率', perk: '4Lからスキルへの変換効率補正（割り振りに+1ボーナス）', icon: '📊', color: 'border-emerald-500/40 bg-emerald-950/10' }
+                { type: 'R（現実的）', name: 'リキヤ', favored: '実行スキル', perk: '「実行」スキル獲得 pt +1 ボーナス ＆ 体力消費20%軽減', icon: '🛠️', color: 'border-yellow-500/40 bg-yellow-950/10' },
+                { type: 'I（研究的）', name: 'イオリ', favored: '思考スキル', perk: '「思考」スキル獲得 pt +1 ボーナス ＆ 受講費50%割引', icon: '🔍', color: 'border-cyan-500/40 bg-cyan-950/10' },
+                { type: 'A（芸術的）', name: 'アオイ', favored: '柔軟スキル', perk: '「柔軟」スキル獲得 pt +1 ボーナス ＆ 体力回復1.5倍', icon: '🎨', color: 'border-purple-500/40 bg-purple-950/10' },
+                { type: 'S（社会的）', name: 'ソウタ', favored: '対人スキル', perk: '「対人」スキル獲得 pt +1 ボーナス ＆ 愛で体力+10回復', icon: '🤝', color: 'border-blue-500/40 bg-blue-950/10' },
+                { type: 'E（企業的）', name: 'エイジ', favored: 'プロジェクト推進', perk: '協力プロジェクト達成時、全4L+1 ＆ 報酬資金+5万円', icon: '🚀', color: 'border-red-500/40 bg-red-950/10' },
+                { type: 'C（慣習的）', name: 'チヒロ', favored: 'プロセス・効率', perk: '4Lからスキルへの変換効率+1 ＆ 毎ターン手当+2万円', icon: '📊', color: 'border-emerald-500/40 bg-emerald-950/10' }
               ].map((c, i) => (
                 <div key={i} className={`glass-panel p-4 rounded-xl border ${c.color} flex flex-col justify-between`}>
                   <div>

@@ -53,9 +53,9 @@ export function computeSkillPoints(
     pt += 1;
   }
 
-  // RIASEC 1.5倍補正
+  // RIASEC 得意スキル +1 ボーナス
   if (character.favoredSkill === skill) {
-    pt = Math.floor(pt * 1.5);
+    pt += 1;
   }
 
   return Math.max(1, pt);

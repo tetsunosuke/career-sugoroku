@@ -12,11 +12,18 @@ interface Props {
 export const SetupModal: React.FC<Props> = ({ onStart }) => {
   const [step, setStep] = useState<SetupStep>('character');
   const [selectedChar, setSelectedChar] = useState<Character | null>(null);
+  const [previewChar, setPreviewChar] = useState<Character | null>(null);
   const [selectedGen, setSelectedGen] = useState<GenerationConfig | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<CourseConfig | null>(null);
 
   const handleCharacterNext = () => {
     if (selectedChar) setStep('generation');
+  };
+
+  const handleSelectPreviewChar = (char: Character) => {
+    setSelectedChar(char);
+    setPreviewChar(null);
+    setStep('generation');
   };
 
   const handleGenerationNext = () => {
@@ -95,7 +102,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
               <h2 className="text-lg font-bold flex items-center justify-center gap-2 text-indigo-300">
                 <User className="w-5 h-5" /> RIASECキャラクターを選んでください
               </h2>
-              <p className="text-xs text-slate-400 mt-1">あなたの強みに合ったキャラクターを1人選択してください。</p>
+              <p className="text-xs text-slate-400 mt-1">カードをタップすると拡大して詳細なプロフィールを確認できます。</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -104,11 +111,14 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 return (
                   <div
                     key={char.id}
-                    onClick={() => setSelectedChar(char)}
-                    className={`cursor-pointer p-4 rounded-xl border transition-all duration-200 glass-panel-interactive flex flex-col justify-between ${
+                    onClick={() => {
+                      setSelectedChar(char);
+                      setPreviewChar(char);
+                    }}
+                    className={`cursor-pointer p-4 rounded-xl border transition-all duration-200 glass-panel-interactive flex flex-col justify-between group ${
                       isSelected
                         ? 'border-indigo-500 bg-indigo-950/60 ring-2 ring-indigo-500/50 shadow-lg shadow-indigo-500/20 scale-[1.02]'
-                        : 'border-slate-700/60 bg-slate-900/40 opacity-80 hover:opacity-100'
+                        : 'border-slate-700/60 bg-slate-900/40 opacity-85 hover:opacity-100'
                     }`}
                   >
                     <div>
@@ -117,7 +127,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                           src={char.avatarUrl}
                           alt={char.name}
                           style={{ width: '56px', height: '56px', minWidth: '56px', minHeight: '56px', maxWidth: '56px', maxHeight: '56px', borderRadius: '50%', objectFit: 'cover' }}
-                          className="border-2 border-indigo-400/50 shadow-md shrink-0 block"
+                          className="border-2 border-indigo-400/50 shadow-md shrink-0 block group-hover:scale-105 transition-transform"
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-1">
@@ -131,8 +141,9 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                       </div>
                       <p className="text-xs text-slate-300 mt-3 line-clamp-2 leading-relaxed">{char.description}</p>
                     </div>
-                    <div className="mt-3 pt-2 border-t border-slate-700/50 text-[11px] font-semibold text-amber-300">
-                      ✨ {char.perkText}
+                    <div className="mt-3 pt-2 border-t border-slate-700/50 flex items-center justify-between text-[11px] text-amber-300 font-semibold">
+                      <span className="truncate">✨ {char.perkText}</span>
+                      <span className="text-indigo-400 text-[10px] underline ml-1 shrink-0">🔍 拡大表示</span>
                     </div>
                   </div>
                 );
@@ -151,6 +162,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
               >
                 次へ：年代を選択 <ArrowRight className="w-5 h-5" />
               </button>
+            </div>
             </div>
           </div>
         )}
@@ -314,6 +326,75 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
           </div>
         )}
       </div>
+
+      {/* キャラクター拡大表示・詳細確認モーダル */}
+      {previewChar && (
+        <div className="modal-overlay z-[140] animate-fadeIn p-4">
+          <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-indigo-500/50 shadow-2xl bg-slate-950/95 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+            {/* ヘッダー情報 */}
+            <div className="text-center space-y-3">
+              <div className="relative w-32 h-32 mx-auto">
+                <img
+                  src={previewChar.avatarUrl}
+                  alt={previewChar.name}
+                  style={{
+                    width: '128px',
+                    height: '128px',
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }}
+                  className="border-4 border-indigo-400 shadow-2xl block mx-auto"
+                />
+              </div>
+
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold mb-1">
+                  {previewChar.riasecType}
+                </div>
+                <h2 className="text-2xl font-black text-white">{previewChar.name}</h2>
+              </div>
+            </div>
+
+            {/* 詳細説明文 */}
+            <div className="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10">
+              <span className="text-xs font-bold text-indigo-300 block uppercase tracking-wider">
+                👤 キャラクター概要・強み
+              </span>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                {previewChar.description}
+              </p>
+            </div>
+
+            {/* 特権・固有スキル効果 */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 to-indigo-950/40 border border-amber-500/30 space-y-1.5">
+              <span className="text-xs font-extrabold text-amber-400 block">
+                ✨ 固有パッシブ能力
+              </span>
+              <p className="text-sm font-bold text-amber-200">
+                {previewChar.perkText}
+              </p>
+            </div>
+
+            {/* 決定 / キャンセルボタン */}
+            <div className="pt-2 space-y-2">
+              <button
+                onClick={() => handleSelectPreviewChar(previewChar)}
+                className="w-full py-3.5 rounded-xl font-bold text-base text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2"
+              >
+                【{previewChar.name}】でスタート！ <ArrowRight className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setPreviewChar(null)}
+                className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                ← 他のキャラクターを見る
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

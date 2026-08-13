@@ -7,7 +7,7 @@ export const CHARACTERS: Character[] = [
     riasecType: 'R（現実的）',
     favoredSkill: 'execution',
     description: '現場での即戦力と実務遂行能力に優れる技術思考スペシャリスト。',
-    perkText: '「実行」スキル獲得1.5倍 ＆ 移動・労働時の体力消費20%軽減',
+    perkText: '「実行」スキル獲得 pt +1 ボーナス ＆ 移動・労働時の体力消費20%軽減',
     avatarUrl: '/images/rikiya.jpg'
   },
   {
@@ -16,7 +16,7 @@ export const CHARACTERS: Character[] = [
     riasecType: 'I（研究的）',
     favoredSkill: 'thinking',
     description: '本質を問い、緻密な構造化と課題発見を得意とするアナリスト。',
-    perkText: '「思考」スキル獲得1.5倍 ＆ 学びカードの受講費50%割引',
+    perkText: '「思考」スキル獲得 pt +1 ボーナス ＆ 学びカードの受講費50%割引',
     avatarUrl: '/images/iori.jpg'
   },
   {
@@ -25,7 +25,7 @@ export const CHARACTERS: Character[] = [
     riasecType: 'A（芸術的）',
     favoredSkill: 'flexibility',
     description: '固定概念に囚われず、変化に適応し枠を超えるクリエイター。',
-    perkText: '「柔軟」スキル獲得1.5倍 ＆ 余暇（Leisure）の体力回復量1.5倍',
+    perkText: '「柔軟」スキル獲得 pt +1 ボーナス ＆ 余暇（Leisure）の体力回復量1.5倍',
     avatarUrl: '/images/aoi.jpg'
   },
   {
@@ -34,7 +34,7 @@ export const CHARACTERS: Character[] = [
     riasecType: 'S（社会的）',
     favoredSkill: 'interpersonal',
     description: '他者の感情に寄り添い、信頼と巻き込みで協働を促すファシリテーター。',
-    perkText: '「対人」スキル獲得1.5倍 ＆ 愛（Love）獲得時に体力+10回復ボーナス',
+    perkText: '「対人」スキル獲得 pt +1 ボーナス ＆ 愛（Love）獲得時に体力+10回復ボーナス',
     avatarUrl: '/images/sota.jpg'
   },
   {
