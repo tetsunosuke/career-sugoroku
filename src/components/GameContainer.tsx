@@ -252,19 +252,25 @@ export const GameContainer: React.FC = () => {
       drawCount += 1;
       addLog(`🔥 スタンス【かなりがんばってみる】を選択！（体力-15 HP, 資金+5 CR, ドローカード+1枚）`, 'warn');
     } else if (stance === 'vacation') {
-      // 有給を使う: 有休消化+1回, 体力+20 HP回復
+      // 有給を使う: 有休消化+1回, 体力+20 HP回復 (アオイ特権で1.5倍の+30 HP)
+      const baseRecoverHp = player.character.id === 'CHAR_A' ? 30 : 20;
       updatedLeaves.used = Math.min(updatedLeaves.max, updatedLeaves.used + 1);
-      updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + 20);
+      updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + baseRecoverHp);
       drawCount = 1;
       selectCount = 1;
 
-      if (useLeisureDeck && updatedMoney >= 3) {
-        // 資金 3 CR 消費で Leisure (余暇/ライフ) 山札からドロー！
-        updatedMoney -= 3;
-        targetDeck = 'life';
-        addLog(`✨ 贅沢有給旅行を取得！（3 CRを自己投資し、【Leisure (余暇) の山札】からドロー！ / 体力+20 HP回復）`, 'info');
+      if (useLeisureDeck) {
+        // イオリ (CHAR_I) の特権: 費用50%割引 (3 CR -> 1 CR)
+        const costMoney = player.character.id === 'CHAR_I' ? 1 : 3;
+
+        if (updatedMoney >= costMoney) {
+          // 資金消費で Leisure (余暇/リフレッシュ) 山札から直接ドロー！
+          updatedMoney -= costMoney;
+          targetDeck = 'leisure';
+          addLog(`✨ 贅沢有給旅行を取得！（${costMoney} CRを自己投資し、【Leisure (余暇) の専用山札】からドロー！ / 体力+${baseRecoverHp} HP回復）`, 'info');
+        }
       } else {
-        addLog(`🌿 スタンス【通常有給】を選択！（有休消化 ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+20 HP回復）`, 'info');
+        addLog(`🌿 スタンス【通常有給】を選択！（有休消化 ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+${baseRecoverHp} HP回復${player.character.id === 'CHAR_A' ? ' [アオイ回復1.5倍特権]' : ''}）`, 'info');
       }
     } else {
       addLog(`💼 スタンス【引き受ける】を選択。（順当に業務・活動に対応）`, 'info');
@@ -317,6 +323,8 @@ export const GameContainer: React.FC = () => {
 
     addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]`, 'card');
 
+    let updatedHealth = { ...player.health };
+
     // ① Labor獲得による偶発的なポータブルスキルランダム成長
     if (gainedLabor > 0) {
       const randomSkill = getRandomSkill();
@@ -324,10 +332,17 @@ export const GameContainer: React.FC = () => {
       addLog(`⚡ 現場での実践(Labor +${gainedLabor})により、【${randomSkill.label}】スキルが偶発的に+1成長！`, 'skill');
     }
 
+    // ② ソウタ (CHAR_S) の特権: Love獲得時に体力 +5 HP 回復
+    if (gainedLove > 0 && player.character.id === 'CHAR_S') {
+      updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + 5);
+      addLog(`💖 ソウタの共感特権発動！絆(Love +${gainedLove})により、心が満たされ体力 +5 HP 回復！`, 'info');
+    }
+
     setPlayer({
       ...player,
       stats4L: updated4L,
-      skills: updatedSkills
+      skills: updatedSkills,
+      health: updatedHealth
     });
 
     // ② マスの確定基礎スキルpt (tile.skillPt) と Learnカードpt (gainedLearn) を合算
@@ -456,7 +471,7 @@ export const GameContainer: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl font-black bg-gradient-to-r from-indigo-300 via-purple-200 to-pink-300 bg-clip-text text-transparent">
-              キャリアすごろく
+              4Lキャリアクエスト
             </h1>
             <p className="text-xs text-slate-400">自律型キャリアシミュレーション Web App</p>
           </div>

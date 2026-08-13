@@ -12,7 +12,7 @@ import type {
   CareerGoal,
   FirstLapSummary
 } from '../types/game';
-import { WORK_DECK, LEARN_DECK, LIFE_DECK } from '../data/decks';
+import { WORK_DECK, LEARN_DECK, LOVE_DECK, LEISURE_DECK } from '../data/decks';
 import { CAREER_GOALS } from '../data/goals';
 
 export function createInitialPlayer(
@@ -88,7 +88,14 @@ export function computeGoalAchievement(player: PlayerState): number {
   }
 
   if (maxScore === 0) return 100;
-  return Math.round(totalScore / (maxScore / 100));
+  let finalRate = Math.round(totalScore / (maxScore / 100));
+
+  // 労働基準法・コンディショニング遵守チェック: 有給未消化(used === 0)の場合は -10% ペナルティ
+  if (player.paidLeaves && player.paidLeaves.used === 0) {
+    finalRate = Math.max(0, finalRate - 10);
+  }
+
+  return finalRate;
 }
 
 /**
@@ -127,8 +134,9 @@ export function getDeckCards(deckType: DeckType, count: number): Card4L[] {
   let pool: Card4L[] = [];
   if (deckType === 'work') pool = WORK_DECK;
   else if (deckType === 'learn') pool = LEARN_DECK;
-  else if (deckType === 'life') pool = LIFE_DECK;
-  else pool = [...WORK_DECK, ...LEARN_DECK, ...LIFE_DECK];
+  else if (deckType === 'life') pool = LOVE_DECK;
+  else if (deckType === 'leisure') pool = LEISURE_DECK;
+  else pool = [...WORK_DECK, ...LEARN_DECK, ...LOVE_DECK, ...LEISURE_DECK];
 
   // シャッフルして取得
   const shuffled = [...pool].sort(() => Math.random() - 0.5);

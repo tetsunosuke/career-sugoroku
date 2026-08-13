@@ -46,7 +46,7 @@ export interface CourseConfig {
   description: string;
 }
 
-export type DeckType = 'work' | 'learn' | 'life' | 'any';
+export type DeckType = 'work' | 'learn' | 'life' | 'leisure' | 'any';
 
 export interface Card4L {
   id: string;

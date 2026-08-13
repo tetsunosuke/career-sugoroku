@@ -73,11 +73,11 @@ export const GuideContent: React.FC<GuideContentProps> = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
               {[
-                { step: '01', title: 'ダイスを振る', icon: '🎲', desc: '1〜6の出目でマスを進みます。偶発的なイベントに遭遇！' },
-                { step: '02', title: 'マスの効果&カード', icon: '🎴', desc: '到着マスの効果を受け、「仕事・学び・生活」などのカードを獲得。' },
+                { step: '01', title: 'ダイスを振る', icon: '🎲', desc: '1〜2の出目でマスを進みます。着実な歩みの中で偶発的なイベントに遭遇！' },
+                { step: '02', title: 'マスの効果&カード', icon: '🎴', desc: '到着マスの効果を受け、「仕事・学び・関係・余暇」などのカードを獲得。' },
                 { step: '03', title: '4Lリソース獲得', icon: '💎', desc: 'カードやマスの内容に応じた4Lポイントを獲得。' },
                 { step: '04', title: 'スキル変換', icon: '⚡', desc: '獲得した4Lを自身のポータブルスキルへポイント割り振り。' },
-                { step: '05', title: 'プロジェクト達成', icon: '🎯', desc: '必要スキルを満たすプロジェクトを完了し勝利ptを獲得！' }
+                { step: '05', title: 'プロジェクト達成', icon: '🎯', desc: '必要スキルを満たす協力PJを達成し豪華報酬(4L・資金・体力)を獲得！' }
               ].map((item, idx) => (
                 <div key={idx} className="glass-panel p-4 rounded-xl border border-white/10 hover:border-indigo-500/50 transition-all">
                   <div className="text-xs font-black text-indigo-400 tracking-wider mb-1">STEP {item.step}</div>

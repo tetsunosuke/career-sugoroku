@@ -148,7 +148,7 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
         <div className="space-y-2.5">
           {skillConfig.map((sk) => {
             const IconComp = sk.icon;
-            const maxVal = 10;
+            const maxVal = 15;
             const percentage = Math.min(100, (sk.value / maxVal) * 100);
 
             return (
