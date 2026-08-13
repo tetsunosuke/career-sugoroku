@@ -207,10 +207,11 @@ export const GameContainer: React.FC = () => {
 
     if (isMandatoryVacationEvent) {
       if (updatedLeaves.used < updatedLeaves.max) {
-        // 有休が残っている場合: 有休を1回強制消化 & Love +1 獲得！
+        // 有休が残っている場合: 有休を1回強制消化 & Love +1 & Learn +1 獲得！
         updatedLeaves.used += 1;
         updated4L.love += 1;
-        addLog(`🚨【40-50代介護イベント】家族の介護サポートのため有休を消化し、家族との絆が深まりました（消化: ${updatedLeaves.used}/${updatedLeaves.max}回, 💖 Love +1 獲得！）。`, 'card');
+        updated4L.learn += 1;
+        addLog(`🚨【40-50代介護イベント】家族の介護サポートのため有休を消化し、家族の絆と人生の学びが深まりました（消化: ${updatedLeaves.used}/${updatedLeaves.max}回, 💖 Love +1 / 💡 Learn +1 獲得！）。`, 'card');
       } else {
         // 有休が無い場合: マネー 10 CR 減少ペナルティ
         updatedMoney = Math.max(0, updatedMoney - 10);
