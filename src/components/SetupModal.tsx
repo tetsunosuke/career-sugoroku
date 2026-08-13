@@ -381,7 +381,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                 ← 戻る
               </button>
               <button
-                onClick={handleCourseConfirm}
+                onClick={handleCourseNext}
                 disabled={!selectedCourse}
                 className={`px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-2 transition-all duration-200 ${
                   selectedCourse
@@ -389,7 +389,7 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                 }`}
               >
-                キャリアシミュレーションを開始する 🚀
+                4. 自己決定目標の選択へ進む 🎯
               </button>
             </div>
           </div>
