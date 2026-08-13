@@ -64,6 +64,48 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
         </div>
       </div>
 
+      {/* 資金・体力 パラメーター */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* 資金 */}
+        <div className="p-3 rounded-xl bg-slate-900/80 border border-amber-500/30 flex items-center justify-between">
+          <div>
+            <span className="text-xs font-semibold text-amber-400 flex items-center gap-1">
+              💰 資金 (資産)
+            </span>
+            <span className="text-xl font-black text-amber-300">
+              {player.money} <span className="text-xs font-normal text-amber-200">万円</span>
+            </span>
+          </div>
+        </div>
+
+        {/* 体力 */}
+        <div className="p-3 rounded-xl bg-slate-900/80 border border-emerald-500/30 space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-semibold text-emerald-400 flex items-center gap-1">
+              ❤️ 体力 (コンディション)
+            </span>
+            <span className="font-bold text-white">
+              {player.health.current} / {player.health.max}
+            </span>
+          </div>
+          <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden border border-emerald-900">
+            <div
+              className={`h-full transition-all duration-500 ${
+                (player.health.current / player.health.max) < 0.3
+                  ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]'
+                  : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
+              }`}
+              style={{ width: `${Math.max(0, Math.min(100, (player.health.current / player.health.max) * 100))}%` }}
+            />
+          </div>
+          {(player.health.current / player.health.max) < 0.3 && (
+            <span className="text-[10px] font-bold text-rose-400 block animate-pulse">
+              ⚠️ 体力低下中！余暇や愛で回復を
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* 4L パラメーター */}
       <div className="space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">

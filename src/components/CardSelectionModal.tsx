@@ -53,20 +53,38 @@ export const CardSelectionModal: React.FC<Props> = ({
           {activeCards.map((card, idx) => (
             <div
               key={card.id + idx}
-              className="p-4 rounded-xl border border-indigo-500/40 bg-indigo-950/60 shadow-md animate-tileReveal"
+              className="p-4 rounded-xl border border-indigo-500/40 bg-indigo-950/60 shadow-md animate-tileReveal flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  {card.deck === 'work' ? '💼 仕事(Labor)の山' : card.deck === 'learn' ? '📚 学び(Learn)の山' : '💖 ライフの山'}
-                </span>
-                <span className="text-[10px] text-slate-400 font-mono">Card #{idx + 1}</span>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    {card.deck === 'work' ? '💼 仕事(Labor)の山' : card.deck === 'learn' ? '📚 学び(Learn)の山' : '💖 ライフの山'}
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono">Card #{idx + 1}</span>
+                </div>
+                {card.title && <div className="text-sm font-bold text-white mb-1">{card.title}</div>}
               </div>
-              <div className="py-2 text-center bg-slate-950/50 rounded-lg border border-slate-800">
-                <div className="flex items-center justify-center flex-wrap gap-2 text-xs font-black">
+
+              <div className="py-2.5 px-3 bg-slate-950/70 rounded-lg border border-slate-800 space-y-1.5 mt-2">
+                <div className="flex items-center justify-center flex-wrap gap-1.5 text-xs font-black">
                   {card.stats.labor && <span className="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">Labor +{card.stats.labor * multiplier}</span>}
                   {card.stats.learn && <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">Learn +{card.stats.learn * multiplier}</span>}
                   {card.stats.love && <span className="px-2 py-0.5 rounded bg-pink-500/20 text-pink-400 border border-pink-500/30">Love +{card.stats.love * multiplier}</span>}
                   {card.stats.leisure && <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Leisure +{card.stats.leisure * multiplier}</span>}
+                </div>
+
+                {/* 資金・体力効果 */}
+                <div className="flex items-center justify-center gap-2 text-[11px] font-bold border-t border-white/5 pt-1">
+                  {card.moneyEffect !== undefined && card.moneyEffect !== 0 && (
+                    <span className={card.moneyEffect > 0 ? 'text-amber-300' : 'text-rose-300'}>
+                      💰 資金 {card.moneyEffect > 0 ? `+${card.moneyEffect}` : card.moneyEffect}万
+                    </span>
+                  )}
+                  {card.healthEffect !== undefined && card.healthEffect !== 0 && (
+                    <span className={card.healthEffect > 0 ? 'text-emerald-300' : 'text-rose-300'}>
+                      ❤️ 体力 {card.healthEffect > 0 ? `+${card.healthEffect}` : card.healthEffect}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

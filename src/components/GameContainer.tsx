@@ -75,9 +75,46 @@ export const GameContainer: React.FC = () => {
     const nextPos = Math.min(12, currentPosition + diceVal);
     const tile = BOARD_TILES[nextPos];
 
+    // 体力・資金の移動時変動
+    let staminaCost = 5;
+    if (player.character.id === 'CHAR_R') {
+      staminaCost = 4; // リキヤ特権: 20%軽減
+    }
+
+    let nextMoney = player.money;
+    let nextHealth = Math.max(0, player.health.current - staminaCost);
+
+    // 大手企業コース福利厚生 & チヒロ手当
+    if (player.course.id === 'enterprise') {
+      nextHealth = Math.min(player.health.max, nextHealth + 5);
+      nextMoney += 1;
+    }
+    if (player.character.id === 'CHAR_C') {
+      nextMoney += 2; // チヒロ特権
+    }
+
+    // マス効果
+    if (tile.moneyEffect) nextMoney += tile.moneyEffect;
+    if (tile.healthEffect) nextHealth = Math.max(0, Math.min(player.health.max, nextHealth + tile.healthEffect));
+
     setCurrentPosition(nextPos);
-    setPlayer({ ...player, position: nextPos });
-    addLog(`ダイスの出目 [${diceVal}] でマス #${nextPos}「${tile.name}」へ移動しました。`, 'move');
+
+    const updatedPlayer: PlayerState = {
+      ...player,
+      position: nextPos,
+      money: Math.max(0, nextMoney),
+      health: { ...player.health, current: nextHealth }
+    };
+    setPlayer(updatedPlayer);
+
+    addLog(`ダイスの出目 [${diceVal}] でマス #${nextPos}「${tile.name}」へ移動。（体力 -${staminaCost}${tile.moneyEffect ? `, 資金 ${tile.moneyEffect > 0 ? '+' : ''}${tile.moneyEffect}万` : ''}）`, 'move');
+
+    // 体力切れ（バーンアウト・燃え尽き）判定
+    if (nextHealth <= 0) {
+      addLog(`⚠️ 体力が0になり燃え尽きました！ 1ターンしっかり休息して体力を回復します。`, 'warn');
+      setPhase('BURNOUT_REST');
+      return;
+    }
 
     // 12番マス（ゴール）到達判定
     if (nextPos === 12) {
@@ -86,6 +123,8 @@ export const GameContainer: React.FC = () => {
         return {
           ...prev,
           position: 12,
+          money: prev.money + 20,
+          health: { ...prev.health, current: prev.health.max },
           stats4L: {
             labor: prev.stats4L.labor + 1,
             learn: prev.stats4L.learn + 1,
@@ -94,7 +133,7 @@ export const GameContainer: React.FC = () => {
           }
         };
       });
-      addLog(`ゴール！直獲得特権により全4Lキューブを+1獲得しました！`, 'card');
+      addLog(`ゴール！直獲得特権により全4L+1、特別ボーナス20万円＆体力完全回復！`, 'card');
       setPhase('GAME_OVER');
       return;
     }
@@ -126,8 +165,20 @@ export const GameContainer: React.FC = () => {
     setPendingSkillBasePt(tile.skillPt);
     setForcedSkill(tile.isSpecialSkillAlloc);
 
-    // マス拡大説明表示フェーズへ移行
     setPhase('TILE_ARRIVAL');
+  };
+
+  // 燃え尽き復帰
+  const handleRecoverBurnout = () => {
+    if (!player) return;
+    const recoveredHealth = Math.floor(player.health.max * 0.6);
+    setPlayer({
+      ...player,
+      health: { ...player.health, current: recoveredHealth }
+    });
+    addLog(`🌿 休暇を過ごして体力を ${recoveredHealth} HP まで回復しました。`, 'info');
+    setTurn((t) => t + 1);
+    setPhase('ROLL');
   };
 
   // マス拡大説明から山札ドロー実行
@@ -143,6 +194,30 @@ export const GameContainer: React.FC = () => {
     const gainedLearn = finalStats.learn || 0;
     const gainedLove = finalStats.love || 0;
     const gainedLeisure = finalStats.leisure || 0;
+
+    let cardMoneyDiff = 0;
+    let cardHealthDiff = 0;
+
+    selectedCards.forEach((c) => {
+      let mEff = c.moneyEffect || 0;
+      let hEff = c.healthEffect || 0;
+
+      // イオリ(I): 学び費用半額
+      if (player.character.id === 'CHAR_I' && mEff < 0 && c.deck === 'learn') {
+        mEff = Math.ceil(mEff / 2);
+      }
+      // アオイ(A): 余暇の体力回復1.5倍
+      if (player.character.id === 'CHAR_A' && hEff > 0 && c.deck === 'life' && c.stats.leisure) {
+        hEff = Math.floor(hEff * 1.5);
+      }
+      // ソウタ(S): 愛の獲得時体力回復+10
+      if (player.character.id === 'CHAR_S' && c.stats.love) {
+        hEff += 10;
+      }
+
+      cardMoneyDiff += mEff;
+      cardHealthDiff += hEff;
+    });
 
     const updated4L = {
       labor: player.stats4L.labor + gainedLabor,
@@ -161,7 +236,7 @@ export const GameContainer: React.FC = () => {
       gainedLeisure > 0 ? `Leisure +${gainedLeisure}` : ''
     ].filter(Boolean).join(', ');
 
-    addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]`, 'card');
+    addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]${cardMoneyDiff !== 0 ? `, 資金 ${cardMoneyDiff > 0 ? '+' : ''}${cardMoneyDiff}万` : ''}${cardHealthDiff !== 0 ? `, 体力 ${cardHealthDiff > 0 ? '+' : ''}${cardHealthDiff}` : ''}`, 'card');
 
     // ① Labor獲得による偶発的なポータブルスキルランダム成長
     if (gainedLabor > 0) {
@@ -173,7 +248,12 @@ export const GameContainer: React.FC = () => {
     setPlayer({
       ...player,
       stats4L: updated4L,
-      skills: updatedSkills
+      skills: updatedSkills,
+      money: Math.max(0, player.money + cardMoneyDiff),
+      health: {
+        ...player.health,
+        current: Math.max(0, Math.min(player.health.max, player.health.current + cardHealthDiff))
+      }
     });
 
     // ② Learn(学び)が得られた場合のみ、ポータブルスキル手動変換フェーズへ進む
@@ -235,13 +315,19 @@ export const GameContainer: React.FC = () => {
   const handleCompleteProject = (proj: CoOpProject) => {
     if (!player) return;
 
-    const isDaiki = player.character.id === 'CHAR_E';
-    const bonus = isDaiki ? 1 : 0;
+    const isEiji = player.character.id === 'CHAR_E';
+    const bonus4L = isEiji ? 1 : 0;
+    const bonusMoney = isEiji ? 5 : 0;
 
-    const rewardLabor = (proj.reward4L.labor || 0) + bonus;
-    const rewardLearn = (proj.reward4L.learn || 0) + bonus;
-    const rewardLove = (proj.reward4L.love || 0) + bonus;
-    const rewardLeisure = (proj.reward4L.leisure || 0) + bonus;
+    const rewardLabor = (proj.reward4L.labor || 0) + bonus4L;
+    const rewardLearn = (proj.reward4L.learn || 0) + bonus4L;
+    const rewardLove = (proj.reward4L.love || 0) + bonus4L;
+    const rewardLeisure = (proj.reward4L.leisure || 0) + bonus4L;
+
+    const earnedMoney = (proj.rewardMoney || 0) + bonusMoney;
+    const costMoney = proj.reqMoney || 0;
+    const costHealth = proj.reqHealth || 0;
+    const earnedHealth = proj.rewardHealth || 0;
 
     const new4L = {
       labor: player.stats4L.labor + rewardLabor,
@@ -250,12 +336,21 @@ export const GameContainer: React.FC = () => {
       leisure: player.stats4L.leisure + rewardLeisure
     };
 
-    setPlayer({ ...player, stats4L: new4L });
+    const newMoney = Math.max(0, player.money - costMoney + earnedMoney);
+    const newHealth = Math.max(0, Math.min(player.health.max, player.health.current - costHealth + earnedHealth));
+
+    setPlayer({
+      ...player,
+      stats4L: new4L,
+      money: newMoney,
+      health: { ...player.health, current: newHealth }
+    });
+
     setProjects((prev) =>
       prev.map((p) => (p.id === proj.id ? { ...p, isCompleted: true } : p))
     );
 
-    addLog(`🎉 協力プロジェクト【${proj.title}】を達成！報酬4Lを獲得。`, 'project');
+    addLog(`🎉 協力プロジェクト【${proj.title}】を達成！報酬4Lおよび報酬資金+${earnedMoney}万を獲得。`, 'project');
   };
 
   return (
@@ -314,8 +409,7 @@ export const GameContainer: React.FC = () => {
               <Board currentPosition={currentPosition} />
               <ProjectsPanel
                 projects={projects}
-                skills={player.skills}
-                character={player.character}
+                player={player}
                 onComplete={handleCompleteProject}
               />
             </div>
@@ -390,6 +484,26 @@ export const GameContainer: React.FC = () => {
               className="text-xs text-slate-400 hover:underline pt-2"
             >
               変更せずに進む
+            </button>
+          </div>
+        </div>
+      )}
+      {/* 燃え尽き症候群・要休息モーダル */}
+      {phase === 'BURNOUT_REST' && (
+        <div className="modal-overlay z-[120]">
+          <div className="glass-panel p-6 max-w-md w-full text-center space-y-4 border-rose-500/40 animate-fadeIn">
+            <div className="w-16 h-16 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-3xl mx-auto">
+              🥱
+            </div>
+            <h3 className="text-xl font-bold text-rose-300">体力が0になりました！</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              連日のハードワークにより疲労が限界に達しました。1ターンしっかり休みを取ってコンディションを回復させましょう。
+            </p>
+            <button
+              onClick={handleRecoverBurnout}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 font-bold text-sm text-white shadow-lg shadow-rose-600/30 transition-all"
+            >
+              🌿 1ターン休養して体力を回復
             </button>
           </div>
         </div>

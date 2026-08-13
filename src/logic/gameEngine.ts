@@ -14,16 +14,21 @@ import { WORK_DECK, LEARN_DECK, LIFE_DECK } from '../data/decks';
 
 export function createInitialPlayer(
   character: Character,
-  generation: GenerationConfig,
+  generation: GenerationConfig & { initialMoney?: number; initialHealth?: { current: number; max: number } },
   course: CourseConfig
 ): PlayerState {
+  const initialMoney = generation.initialMoney ?? 20;
+  const initialHealth = generation.initialHealth ?? { current: 100, max: 100 };
+
   return {
     character,
     generation,
     course,
     position: 0,
     stats4L: { ...generation.initial4L },
-    skills: { ...generation.initialSkills }
+    skills: { ...generation.initialSkills },
+    money: initialMoney,
+    health: { ...initialHealth }
   };
 }
 
@@ -121,17 +126,29 @@ export function getDrawCount(
 }
 
 /**
- * 協力プロジェクトの達成条件を満たしているかチェック
+ * 協力プロジェクトの達成条件を満たしているかチェック (スキル, 資金, 体力)
  */
-export function canCompleteProject(skills: PortableSkills, project: CoOpProject): boolean {
+export function canCompleteProject(player: PlayerState, project: CoOpProject): boolean {
   if (project.isCompleted) return false;
   
+  // 1. 必要スキルのチェック
   for (const [skillKey, reqVal] of Object.entries(project.reqSkills)) {
     const key = skillKey as SkillType;
-    if ((skills[key] || 0) < (reqVal || 0)) {
+    if ((player.skills[key] || 0) < (reqVal || 0)) {
       return false;
     }
   }
+
+  // 2. 必要資金のチェック
+  if (project.reqMoney && player.money < project.reqMoney) {
+    return false;
+  }
+
+  // 3. 必要体力のチェック
+  if (project.reqHealth && player.health.current < project.reqHealth) {
+    return false;
+  }
+
   return true;
 }
 

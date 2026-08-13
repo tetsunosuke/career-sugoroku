@@ -171,12 +171,24 @@ export const ResultModal: React.FC<Props> = ({
               <Trophy className="w-5 h-5" />
             </div>
           </div>
-          <h2 className="text-3xl font-extrabold text-white">
-            キャリア探求の旅 ゴール到達！🎉
+          <h2 className="text-xl md:text-2xl font-black text-indigo-300">
+            {title}
           </h2>
-          <p className="text-indigo-300 font-semibold text-sm">
-            【{character.name}】が {turn} ターンでマス12（長期休暇・リフレッシュ）に到達しました。
+          <p className="text-xs text-slate-400">
+            {character.name}（{character.riasecType}）としてのキャリア達成レポート
           </p>
+
+          {/* 総資産 ＆ 健康度サマリー */}
+          <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto pt-1">
+            <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30">
+              <span className="text-[11px] font-bold text-amber-400 block">💰 最終獲得資金</span>
+              <span className="text-xl font-black text-amber-200">{player.money} 万円</span>
+            </div>
+            <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
+              <span className="text-[11px] font-bold text-emerald-400 block">❤️ 最終コンディション</span>
+              <span className="text-xl font-black text-emerald-200">{player.health.current} HP <span className="text-xs text-slate-400">/ {player.health.max}</span></span>
+            </div>
+          </div>
         </div>
 
         {/* 獲得称号 */}

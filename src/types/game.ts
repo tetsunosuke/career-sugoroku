@@ -52,6 +52,8 @@ export interface Card4L {
   id: string;
   deck: DeckType;
   stats: Partial<FourLStats>;
+  moneyEffect?: number;  // 資金変動 (例: +5万 / -3万)
+  healthEffect?: number; // 体力変動 (例: +10 / -15)
   title?: string;
   description?: string;
 }
@@ -69,6 +71,8 @@ export interface BoardTile {
   category: string;
   deck: DeckType | 'choice';
   skillPt: number;
+  moneyEffect?: number;
+  healthEffect?: number;
   effectDescription: string;
   isSpecialSkillAlloc?: SkillType; // 例: 10番マス柔軟強制
   canChangeCourse?: boolean;       // 例: 9番マスコース変更
@@ -80,7 +84,11 @@ export interface CoOpProject {
   id: string;
   title: string;
   reqSkills: Partial<PortableSkills>;
+  reqMoney?: number;
+  reqHealth?: number;
   reward4L: Partial<FourLStats>;
+  rewardMoney?: number;
+  rewardHealth?: number;
   isCompleted: boolean;
   description: string;
 }
@@ -93,6 +101,7 @@ export type GamePhase =
   | 'DRAW_SELECTION'
   | 'SKILL_ALLOCATION'
   | 'PROJECT_CHECK'
+  | 'BURNOUT_REST'
   | 'GAME_OVER';
 
 export interface GameLog {
@@ -109,4 +118,9 @@ export interface PlayerState {
   position: number;
   stats4L: FourLStats;
   skills: PortableSkills;
+  money: number; // 資金 (万円)
+  health: {
+    current: number; // 現在の体力
+    max: number;     // 最大体力
+  };
 }

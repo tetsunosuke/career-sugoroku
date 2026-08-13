@@ -1,33 +1,33 @@
 import React from 'react';
-import type { CoOpProject, PortableSkills, Character } from '../types/game';
+import type { CoOpProject, PlayerState } from '../types/game';
 import { canCompleteProject } from '../logic/gameEngine';
-import { Target, CheckCircle2, Award, Users } from 'lucide-react';
+import { Target, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   projects: CoOpProject[];
-  skills: PortableSkills;
-  character: Character;
+  player: PlayerState;
   onComplete: (project: CoOpProject) => void;
 }
 
 export const ProjectsPanel: React.FC<Props> = ({
   projects,
-  skills,
-  character,
+  player,
   onComplete
 }) => {
+  const { skills, character, money, health } = player;
+
   return (
     <div className="glass-panel p-5 space-y-4 border-slate-700/50">
       <div className="flex items-center justify-between">
         <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
           <Target className="w-5 h-5 text-indigo-400" /> 協力プロジェクト (中間ゴール)
         </h3>
-        <span className="text-xs text-slate-400">蓄積スキルで共創クリア！</span>
+        <span className="text-xs text-slate-400">蓄積スキル・資金・体力を投入して共創クリア！</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {projects.map((proj) => {
-          const isSatisfied = canCompleteProject(skills, proj);
+          const isSatisfied = canCompleteProject(player, proj);
 
           return (
             <div
@@ -51,9 +51,9 @@ export const ProjectsPanel: React.FC<Props> = ({
                 </div>
                 <p className="text-[11px] text-slate-400 mt-1.5 line-clamp-2">{proj.description}</p>
 
-                {/* 要求スキル一覧 */}
+                {/* 要求スキル・資金・体力一覧 */}
                 <div className="mt-3 pt-2 border-t border-slate-800/80 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">要求ポータブルスキル</span>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">挑戦条件</span>
                   <div className="flex flex-wrap gap-1.5 text-[11px]">
                     {proj.reqSkills.interpersonal && (
                       <span className={`px-1.5 py-0.5 rounded font-semibold ${skills.interpersonal >= proj.reqSkills.interpersonal ? 'bg-blue-500/20 text-blue-300' : 'bg-slate-800 text-slate-400'}`}>
@@ -75,6 +75,16 @@ export const ProjectsPanel: React.FC<Props> = ({
                         柔軟 {skills.flexibility}/{proj.reqSkills.flexibility}
                       </span>
                     )}
+                    {proj.reqMoney && (
+                      <span className={`px-1.5 py-0.5 rounded font-semibold ${money >= proj.reqMoney ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-950 text-rose-400 border border-rose-800'}`}>
+                        資金 {money}/{proj.reqMoney}万
+                      </span>
+                    )}
+                    {proj.reqHealth && (
+                      <span className={`px-1.5 py-0.5 rounded font-semibold ${health.current >= proj.reqHealth ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-950 text-rose-400 border border-rose-800'}`}>
+                        体力 {health.current}/{proj.reqHealth}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -83,12 +93,14 @@ export const ProjectsPanel: React.FC<Props> = ({
               <div className="mt-4 pt-2 border-t border-slate-800/80 flex items-center justify-between">
                 <div className="text-[10px] text-slate-400">
                   <span className="block font-bold text-indigo-300">達成報酬</span>
-                  <div className="flex gap-1.5 text-slate-200">
+                  <div className="flex flex-wrap gap-1.5 text-slate-200">
                     {proj.reward4L.labor && <span>Labor+{proj.reward4L.labor}</span>}
                     {proj.reward4L.learn && <span>Learn+{proj.reward4L.learn}</span>}
                     {proj.reward4L.love && <span>Love+{proj.reward4L.love}</span>}
                     {proj.reward4L.leisure && <span>Leisure+{proj.reward4L.leisure}</span>}
-                    {character.id === 'CHAR_E' && <span className="text-amber-300 font-bold">(+1特権)</span>}
+                    {proj.rewardMoney && <span className="text-amber-300 font-bold">💰+{proj.rewardMoney}万</span>}
+                    {proj.rewardHealth && <span className="text-emerald-300 font-bold">❤️+{proj.rewardHealth}</span>}
+                    {character.id === 'CHAR_E' && <span className="text-amber-300 font-bold">(エイジ特権 +5万/+14L)</span>}
                   </div>
                 </div>
 

@@ -62,7 +62,7 @@ export const GuideContent: React.FC<GuideContentProps> = ({
               <span>🎲</span> キャリアすごろく 基本ガイド
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              「キャリアすごろく」は、ダイスを振って様々な出来事（マス・カード）を巡りながら、人生の4つの要素（<strong className="text-amber-400">Labor</strong>/<strong className="text-purple-400">Learn</strong>/<strong className="text-emerald-400">Leisure</strong>/<strong className="text-pink-400">Love</strong>）を獲得し、自身独自の<strong className="text-cyan-300">ポータブルスキル</strong>へと変換・昇華させてプロジェクトを達成していく自律型キャリアシミュレーションゲームです。
+              「キャリアすごろく」は、ダイスを振って様々な出来事（マス・カード）を巡りながら、人生の4つの要素（<strong className="text-amber-400">Labor</strong>/<strong className="text-purple-400">Learn</strong>/<strong className="text-emerald-400">Leisure</strong>/<strong className="text-pink-400">Love</strong>）を獲得し、自身独自の<strong className="text-cyan-300">ポータブルスキル</strong>へと変換・昇華させながら、<strong className="text-amber-300">💰 資金（資産）</strong>の確保と <strong className="text-emerald-300">❤️ 体力（ウェルビーイング）</strong>のコンディショニングを両立してプロジェクトを達成していく自律型キャリアシミュレーションゲームです。
             </p>
           </div>
 
