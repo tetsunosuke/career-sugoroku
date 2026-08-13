@@ -7,8 +7,9 @@ interface Props {
   skills: PortableSkills;
   baseDrawCount: number;
   skillBonusApplied: boolean;
+  money: number;
   paidLeaves: { used: number; max: number };
-  onSelectStance: (stance: ActionStance) => void;
+  onSelectStance: (stance: ActionStance, useLeisureDeck?: boolean) => void;
 }
 
 export const TileArrivalModal: React.FC<Props> = ({
@@ -16,10 +17,12 @@ export const TileArrivalModal: React.FC<Props> = ({
   skills,
   baseDrawCount,
   skillBonusApplied,
+  money,
   paidLeaves,
   onSelectStance
 }) => {
   const remainingLeaves = paidLeaves.max - paidLeaves.used;
+  const canAffordLeisureVacation = money >= 3;
 
   const getDeckName = (deck: DeckType | 'choice') => {
     if (deck === 'work') return '💼 仕事 (Labor) の山';
@@ -120,37 +123,59 @@ export const TileArrivalModal: React.FC<Props> = ({
               体力を消費して挑戦！資金(CR)獲得アップ＆ドロー枚数+1枚。
             </p>
             <div className="text-[10px] text-amber-300 font-bold pt-1 border-t border-slate-800 flex justify-between">
-              <span>❤️ 体力-15 HP / 💰 +5 CR</span>
+              <span>❤️ 体力-15 / 💰 +5 CR</span>
               <span>🎴 ドロー: {baseDrawCount + 1} 枚</span>
             </div>
           </button>
 
           {/* 3. 有給を使う (リフレッシュ) */}
-          <button
-            onClick={() => onSelectStance('vacation')}
-            disabled={remainingLeaves <= 0}
-            className={`p-4 rounded-xl border transition-all space-y-2 text-left shadow-md ${
+          <div
+            className={`p-4 rounded-xl border space-y-2.5 shadow-md flex flex-col justify-between ${
               remainingLeaves > 0
-                ? 'border-emerald-500/40 bg-slate-900/80 hover:bg-emerald-950/60 hover:border-emerald-400 group cursor-pointer'
-                : 'border-slate-800 bg-slate-900/40 opacity-40 cursor-not-allowed'
+                ? 'border-emerald-500/40 bg-slate-900/80'
+                : 'border-slate-800 bg-slate-900/40 opacity-40'
             }`}
           >
-            <div className="flex items-center justify-between">
-              <span className="font-extrabold text-sm text-emerald-300 flex items-center gap-1">
-                <Coffee className="w-4 h-4 text-emerald-400" /> 有給を使う
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
-                残{remainingLeaves}回
-              </span>
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-extrabold text-sm text-emerald-300 flex items-center gap-1">
+                  <Coffee className="w-4 h-4 text-emerald-400" /> 有給を使う
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
+                  残{remainingLeaves}回
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-tight">
+                有休を1回消費し体力回復 (+20 HP)。
+              </p>
             </div>
-            <p className="text-[11px] text-slate-300 leading-tight">
-              有休を1回消費して休養。体力を大幅回復（+20 HP）。
-            </p>
-            <div className="text-[10px] text-emerald-300 font-bold pt-1 border-t border-slate-800 flex justify-between">
-              <span>❤️ 体力+20 HP 回復</span>
-              <span>🎴 ドロー: 1 枚</span>
+
+            <div className="space-y-1.5 pt-1 border-t border-slate-800">
+              {/* 通常有休ドロー */}
+              <button
+                onClick={() => onSelectStance('vacation', false)}
+                disabled={remainingLeaves <= 0}
+                className="w-full py-1.5 px-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-200 transition-all flex items-center justify-between"
+              >
+                <span>🌿 通常有休</span>
+                <span className="text-slate-400 font-normal">無料 (通常山ドロー)</span>
+              </button>
+
+              {/* 贅沢有休ドロー (Leisure山から引く) */}
+              <button
+                onClick={() => onSelectStance('vacation', true)}
+                disabled={remainingLeaves <= 0 || !canAffordLeisureVacation}
+                className={`w-full py-1.5 px-2 rounded-lg border text-[10px] font-bold transition-all flex items-center justify-between ${
+                  canAffordLeisureVacation
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 border-emerald-400 text-white shadow-lg'
+                    : 'bg-slate-900/50 border-slate-800 text-slate-500 cursor-not-allowed'
+                }`}
+              >
+                <span className="flex items-center gap-1">✨ 贅沢有休旅行</span>
+                <span>💰 3 CR (Leisure山ドロー)</span>
+              </button>
             </div>
-          </button>
+          </div>
         </div>
 
         <p className="text-[10px] text-slate-500">

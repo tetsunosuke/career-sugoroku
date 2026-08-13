@@ -182,10 +182,10 @@ export const GameContainer: React.FC = () => {
   };
 
   // マス拡大・出来事モーダルから行動スタンスを選択
-  const handleSelectStance = (stance: ActionStance) => {
+  const handleSelectStance = (stance: ActionStance, useLeisureDeck?: boolean) => {
     if (!player) return;
     const tile = BOARD_TILES[currentPosition];
-    const targetDeck: DeckType = tile.deck === 'choice' ? 'any' : tile.deck;
+    let targetDeck: DeckType = tile.deck === 'choice' ? 'any' : tile.deck;
 
     let { drawCount, selectCount, multiplier, skillBonusApplied, skillBonusText } = getDrawCount(
       player.generation,
@@ -206,12 +206,20 @@ export const GameContainer: React.FC = () => {
       drawCount += 1;
       addLog(`🔥 スタンス【かなりがんばってみる】を選択！（体力-15 HP, 資金+5 CR, ドローカード+1枚）`, 'warn');
     } else if (stance === 'vacation') {
-      // 有給を使う: 有休消化+1回, 体力+20 HP回復, 資金消費0, ドロー1枚
+      // 有給を使う: 有休消化+1回, 体力+20 HP回復
       updatedLeaves.used = Math.min(updatedLeaves.max, updatedLeaves.used + 1);
       updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + 20);
       drawCount = 1;
       selectCount = 1;
-      addLog(`🌿 スタンス【有給を使う】を選択！（有休消化 ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+20 HP回復）`, 'info');
+
+      if (useLeisureDeck && updatedMoney >= 3) {
+        // 資金 3 CR 消費で Leisure (余暇/ライフ) 山札からドロー！
+        updatedMoney -= 3;
+        targetDeck = 'life';
+        addLog(`✨ 贅沢有給旅行を取得！（3 CRを自己投資し、【Leisure (余暇) の山札】からドロー！ / 体力+20 HP回復）`, 'info');
+      } else {
+        addLog(`🌿 スタンス【通常有給】を選択！（有休消化 ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+20 HP回復）`, 'info');
+      }
     } else {
       addLog(`💼 スタンス【引き受ける】を選択。（順当に業務・活動に対応）`, 'info');
     }
@@ -477,6 +485,7 @@ export const GameContainer: React.FC = () => {
           skills={player.skills}
           baseDrawCount={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).drawCount}
           skillBonusApplied={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).skillBonusApplied}
+          money={player.money}
           paidLeaves={player.paidLeaves || { used: 0, max: 3 }}
           onSelectStance={handleSelectStance}
         />
