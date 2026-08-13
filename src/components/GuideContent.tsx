@@ -402,7 +402,7 @@ export const GuideContent: React.FC<GuideContentProps> = ({
               <h3 className="text-xl sm:text-2xl font-bold text-white">サニー・ハンセンの「統合的ライフプランニング（4L理論）」</h3>
             </div>
             <p className="text-sm text-slate-300 leading-relaxed">
-              キャリア学者サニー・ハンセン（Sunny L. Hansen）が唱えた、人生を4つの「L」の織物（モザイク）として統合的に捉える理論。仕事（Labor）のみをキャリアと捉えず、生涯を通じた4つの要素の調和と意味づけが豊かな人生を創ると定義しました。
+              キャリア学者サニー・ハンセン（Sunny L. Hansen）が唱えた、人生を4つの「L」の織物（パッチワーク・キルト）として統合的に捉える理論。仕事（Labor）のみをキャリアと捉えず、生涯を通じた4つの要素の調和と意味づけが豊かな人生を創ると定義しました。
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div className="bg-slate-900/80 p-4 rounded-xl border border-orange-500/30">
