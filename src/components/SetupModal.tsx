@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import type { Character, GenerationConfig, CourseConfig } from '../types/game';
+import type { Character, GenerationConfig, CourseConfig, CareerGoal } from '../types/game';
 import { CHARACTERS, GENERATIONS, COURSES } from '../data/characters';
-import { User, Calendar, Briefcase, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { CAREER_GOALS } from '../data/goals';
+import { User, Calendar, Briefcase, Sparkles, CheckCircle2, ArrowRight, Target, Compass } from 'lucide-react';
 import { RadarChart } from './RadarChart';
 
-type SetupStep = 'character' | 'generation' | 'course';
+type SetupStep = 'character' | 'generation' | 'course' | 'goal';
 
 interface Props {
-  onStart: (char: Character, gen: GenerationConfig, course: CourseConfig) => void;
+  onStart: (char: Character, gen: GenerationConfig, course: CourseConfig, goal: CareerGoal) => void;
 }
 
 export const SetupModal: React.FC<Props> = ({ onStart }) => {
@@ -20,6 +21,9 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
 
   const [selectedCourse, setSelectedCourse] = useState<CourseConfig | null>(null);
   const [previewCourse, setPreviewCourse] = useState<CourseConfig | null>(null);
+
+  const [selectedGoal, setSelectedGoal] = useState<CareerGoal | null>(null);
+  const [previewGoal, setPreviewGoal] = useState<CareerGoal | null>(null);
 
   const handleCharacterNext = () => {
     if (selectedChar) setStep('generation');
@@ -41,17 +45,27 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
     setStep('course');
   };
 
-  const handleCourseConfirm = () => {
-    if (selectedChar && selectedGen && selectedCourse) {
-      onStart(selectedChar, selectedGen, selectedCourse);
-    }
+  const handleCourseNext = () => {
+    if (selectedCourse) setStep('goal');
   };
 
   const handleSelectPreviewCourse = (course: CourseConfig) => {
     setSelectedCourse(course);
     setPreviewCourse(null);
-    if (selectedChar && selectedGen) {
-      onStart(selectedChar, selectedGen, course);
+    setStep('goal');
+  };
+
+  const handleGoalConfirm = () => {
+    if (selectedChar && selectedGen && selectedCourse && selectedGoal) {
+      onStart(selectedChar, selectedGen, selectedCourse, selectedGoal);
+    }
+  };
+
+  const handleSelectPreviewGoal = (goal: CareerGoal) => {
+    setSelectedGoal(goal);
+    setPreviewGoal(null);
+    if (selectedChar && selectedGen && selectedCourse) {
+      onStart(selectedChar, selectedGen, selectedCourse, goal);
     }
   };
 
