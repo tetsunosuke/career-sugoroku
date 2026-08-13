@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { Character, GenerationConfig, CourseConfig } from '../types/game';
 import { CHARACTERS, GENERATIONS, COURSES } from '../data/characters';
 import { User, Calendar, Briefcase, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { RadarChart } from './RadarChart';
 
 type SetupStep = 'character' | 'generation' | 'course';
 
@@ -232,19 +233,40 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
                         {isSelected && <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />}
                       </div>
                       <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">{gen.drawRuleText}</p>
-                      <div className="mt-3 pt-2 border-t border-slate-700/50 text-xs text-slate-400 space-y-1">
-                        <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-                          <span className="text-orange-400">Labor: {gen.initial4L.labor}</span>
-                          <span className="text-purple-400">Learn: {gen.initial4L.learn}</span>
-                          <span className="text-pink-400">Love: {gen.initial4L.love}</span>
-                          <span className="text-emerald-400">Leisure: {gen.initial4L.leisure}</span>
+
+                      {/* レーダーチャート2連コンパクト表示 */}
+                      <div className="grid grid-cols-2 gap-2 my-2 py-1 bg-slate-950/40 rounded-xl border border-white/5 text-center">
+                        <div>
+                          <span className="text-[10px] font-bold text-indigo-300 block mb-1">💎 初期 4L</span>
+                          <RadarChart
+                            size={120}
+                            max={4}
+                            fillColor="#818cf8"
+                            strokeColor="#a5b4fc"
+                            gradientId={`card4LGrad-${gen.id}`}
+                            axes={[
+                              { label: 'Labor', value: gen.initial4L.labor, color: '#f97316' },
+                              { label: 'Learn', value: gen.initial4L.learn, color: '#a855f7' },
+                              { label: 'Love', value: gen.initial4L.love, color: '#ec4899' },
+                              { label: 'Leisure', value: gen.initial4L.leisure, color: '#10b981' }
+                            ]}
+                          />
                         </div>
-                        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-slate-400">
-                          <span className="text-slate-300 font-semibold">初期スキル:</span>
-                          <span>対人:{gen.initialSkills.interpersonal}</span>
-                          <span>思考:{gen.initialSkills.thinking}</span>
-                          <span>実行:{gen.initialSkills.execution}</span>
-                          <span>柔軟:{gen.initialSkills.flexibility}</span>
+                        <div>
+                          <span className="text-[10px] font-bold text-purple-300 block mb-1">⚡ ポータブル</span>
+                          <RadarChart
+                            size={120}
+                            max={4}
+                            fillColor="#c084fc"
+                            strokeColor="#e9d5ff"
+                            gradientId={`cardSkillGrad-${gen.id}`}
+                            axes={[
+                              { label: '対人', value: gen.initialSkills.interpersonal, color: '#60a5fa' },
+                              { label: '思考', value: gen.initialSkills.thinking, color: '#22d3ee' },
+                              { label: '実行', value: gen.initialSkills.execution, color: '#facc15' },
+                              { label: '柔軟', value: gen.initialSkills.flexibility, color: '#c084fc' }
+                            ]}
+                          />
                         </div>
                       </div>
                     </div>
@@ -451,33 +473,56 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
               </p>
             </div>
 
-            {/* 初期リソースサマリー */}
+            {/* 初期パラメーターのレーダーチャート比較 */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-indigo-300 block uppercase tracking-wider text-center">
+                📊 初期ステータス バランス分析
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-2xl bg-slate-900/90 border border-indigo-500/20 text-center">
+                <div className="space-y-1">
+                  <span className="text-xs font-extrabold text-indigo-300 block">💎 初期 4Lリソース</span>
+                  <RadarChart
+                    size={170}
+                    max={4}
+                    fillColor="#818cf8"
+                    strokeColor="#a5b4fc"
+                    gradientId={`modal4LGrad-${previewGen.id}`}
+                    axes={[
+                      { label: 'Labor', value: previewGen.initial4L.labor, color: '#f97316' },
+                      { label: 'Learn', value: previewGen.initial4L.learn, color: '#a855f7' },
+                      { label: 'Love', value: previewGen.initial4L.love, color: '#ec4899' },
+                      { label: 'Leisure', value: previewGen.initial4L.leisure, color: '#10b981' }
+                    ]}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-xs font-extrabold text-purple-300 block">⚡ 初期 ポータブルスキル</span>
+                  <RadarChart
+                    size={170}
+                    max={4}
+                    fillColor="#c084fc"
+                    strokeColor="#e9d5ff"
+                    gradientId={`modalSkillGrad-${previewGen.id}`}
+                    axes={[
+                      { label: '対人', value: previewGen.initialSkills.interpersonal, color: '#60a5fa' },
+                      { label: '思考', value: previewGen.initialSkills.thinking, color: '#22d3ee' },
+                      { label: '実行', value: previewGen.initialSkills.execution, color: '#facc15' },
+                      { label: '柔軟', value: previewGen.initialSkills.flexibility, color: '#c084fc' }
+                    ]}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 初期コンディション＆資金 */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-orange-950/30 border border-orange-500/30">
-                <span className="text-[11px] font-bold text-orange-400 block">💎 初期4Lリソース</span>
-                <div className="text-xs font-bold text-slate-200 space-x-1.5 mt-0.5">
-                  <span>L:{previewGen.initial4L.labor}</span>
-                  <span>L:{previewGen.initial4L.learn}</span>
-                  <span>L:{previewGen.initial4L.love}</span>
-                  <span>L:{previewGen.initial4L.leisure}</span>
-                </div>
-              </div>
-              <div className="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30">
-                <span className="text-[11px] font-bold text-cyan-400 block">⚡ 初期ポータブルスキル</span>
-                <div className="text-[11px] font-semibold text-slate-200 space-x-1 mt-0.5">
-                  <span>対人{previewGen.initialSkills.interpersonal}</span>
-                  <span>思考{previewGen.initialSkills.thinking}</span>
-                  <span>実行{previewGen.initialSkills.execution}</span>
-                  <span>柔軟{previewGen.initialSkills.flexibility}</span>
-                </div>
-              </div>
-              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30">
+              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-center">
                 <span className="text-[11px] font-bold text-amber-400 block">💰 スタート時資金</span>
-                <span className="text-base font-black text-amber-200">{(previewGen as any).initialMoney ?? 20} 万円</span>
+                <span className="text-lg font-black text-amber-200">{(previewGen as any).initialMoney ?? 20} 万円</span>
               </div>
-              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
+              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-center">
                 <span className="text-[11px] font-bold text-emerald-400 block">❤️ スタート時体力</span>
-                <span className="text-base font-black text-emerald-200">{(previewGen as any).initialHealth?.current ?? 100} HP</span>
+                <span className="text-lg font-black text-emerald-200">{(previewGen as any).initialHealth?.current ?? 100} HP</span>
               </div>
             </div>
 
