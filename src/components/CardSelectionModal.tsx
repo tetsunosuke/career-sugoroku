@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Card4L, GenerationConfig, FourLStats } from '../types/game';
-import { Sparkles, Layers, ArrowRight } from 'lucide-react';
+import { Sparkles, Layers, ArrowRight, Briefcase, BookOpen, Heart, Smile } from 'lucide-react';
 
 interface Props {
   drawnCards: Card4L[];
@@ -17,7 +17,6 @@ export const CardSelectionModal: React.FC<Props> = ({
   multiplier,
   onConfirm
 }) => {
-  // 自動ドローされた全カード（または枚数制限分）のステータスを集計
   const activeCards = drawnCards.slice(0, Math.min(drawnCards.length, Math.max(selectCount, drawnCards.length)));
 
   const accumulated: Partial<FourLStats> = { labor: 0, learn: 0, love: 0, leisure: 0 };
@@ -34,96 +33,102 @@ export const CardSelectionModal: React.FC<Props> = ({
 
   return (
     <div className="modal-overlay z-[100]">
-      <div className="glass-panel w-full max-w-xl p-6 md:p-8 space-y-6 text-slate-100 border-indigo-500/40 shadow-2xl animate-fadeIn">
-        <div className="space-y-2 text-center">
+      <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-indigo-500/40 shadow-2xl animate-fadeIn text-center">
+        {/* ヘッダー */}
+        <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
-            <Layers className="w-4 h-4" /> 山札から経験カードを自動ドロー！
+            <Layers className="w-4 h-4" /> 経験カードドロー結果
           </div>
-          <h2 className="text-2xl font-bold text-slate-100">
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-wide">
             {generation.name}
           </h2>
-          <p className="text-xs text-slate-300">
-            山札から <strong className="text-amber-300 font-extrabold">{activeCards.length} 枚</strong> のカードがめくられました！
+          <p className="text-xs text-slate-400">
+            山札から <strong className="text-amber-300">{activeCards.length} 枚</strong> のカードを獲得しました！
             {multiplier > 1 && <span className="text-amber-400 font-bold ml-1"> (✨獲得効果 {multiplier} 倍！)</span>}
           </p>
         </div>
 
-        {/* ドローされたカードリスト表示（自動オープン） */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {activeCards.map((card, idx) => (
-            <div
-              key={card.id + idx}
-              className="p-4 rounded-xl border border-indigo-500/40 bg-indigo-950/60 shadow-md animate-tileReveal flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                    {card.deck === 'work' ? '💼 仕事(Labor)の山' : card.deck === 'learn' ? '📚 学び(Learn)の山' : '💖 ライフの山'}
-                  </span>
-                  <span className="text-[10px] text-slate-400 font-mono">Card #{idx + 1}</span>
-                </div>
-                {card.title && <div className="text-sm font-bold text-white mb-1">{card.title}</div>}
-              </div>
-
-              <div className="py-2.5 px-3 bg-slate-950/70 rounded-lg border border-slate-800 space-y-1.5 mt-2">
-                <div className="flex items-center justify-center flex-wrap gap-1.5 text-xs font-black">
-                  {card.stats.labor && <span className="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">Labor +{card.stats.labor * multiplier}</span>}
-                  {card.stats.learn && <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">Learn +{card.stats.learn * multiplier}</span>}
-                  {card.stats.love && <span className="px-2 py-0.5 rounded bg-pink-500/20 text-pink-400 border border-pink-500/30">Love +{card.stats.love * multiplier}</span>}
-                  {card.stats.leisure && <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Leisure +{card.stats.leisure * multiplier}</span>}
-                </div>
-
-                {/* 資金・体力効果 */}
-                <div className="flex items-center justify-center gap-2 text-[11px] font-bold border-t border-white/5 pt-1">
-                  {card.moneyEffect !== undefined && card.moneyEffect !== 0 && (
-                    <span className={card.moneyEffect > 0 ? 'text-amber-300' : 'text-rose-300'}>
-                      💰 資金 {card.moneyEffect > 0 ? `+${card.moneyEffect}` : card.moneyEffect} CR
-                    </span>
-                  )}
-                  {card.healthEffect !== undefined && card.healthEffect !== 0 && (
-                    <span className={card.healthEffect > 0 ? 'text-emerald-300' : 'text-rose-300'}>
-                      ❤️ 体力 {card.healthEffect > 0 ? `+${card.healthEffect}` : card.healthEffect}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 今回獲得できる合計パラメータサマリー */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-slate-900 to-slate-950 border border-indigo-500/30 text-center space-y-2">
-          <span className="text-xs text-indigo-300 font-extrabold uppercase tracking-wider block">
-            🎯 今回のマスで獲得したスコア (4Lパラメータ)
-          </span>
-          <div className="flex items-center justify-center flex-wrap gap-3 text-base font-black py-1">
-            {accumulated.labor ? <span className="px-3 py-1 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">Labor +{accumulated.labor}</span> : null}
-            {accumulated.learn ? <span className="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">Learn +{accumulated.learn}</span> : null}
-            {accumulated.love ? <span className="px-3 py-1 rounded-lg bg-pink-500/20 text-pink-400 border border-pink-500/30">Love +{accumulated.love}</span> : null}
-            {accumulated.leisure ? <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Leisure +{accumulated.leisure}</span> : null}
+        {/* 獲得4Lスコアカード（メインの強調表示） */}
+        <div className="p-6 rounded-2xl bg-gradient-to-b from-indigo-950/80 via-slate-900 to-slate-950 border-2 border-indigo-500/50 shadow-2xl space-y-4 relative overflow-hidden">
+          <div className="text-xs text-indigo-300 font-extrabold uppercase tracking-widest block">
+            🎯 今回獲得した 4L スコア
           </div>
 
-          {/* スキル成長の影響についての説明 */}
-          <div className="pt-2 border-t border-slate-800 text-left text-xs space-y-1">
+          <div className="grid grid-cols-2 gap-3 py-2">
+            {/* Labor */}
+            <div className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+              accumulated.labor
+                ? 'bg-orange-500/20 border-orange-500/50 text-orange-300 shadow-md'
+                : 'bg-slate-900/40 border-slate-800 text-slate-600 opacity-50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-orange-400" />
+                <span className="font-extrabold text-sm">Labor</span>
+              </div>
+              <span className="text-2xl font-black">{accumulated.labor ? `+${accumulated.labor}` : '0'}</span>
+            </div>
+
+            {/* Learn */}
+            <div className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+              accumulated.learn
+                ? 'bg-purple-500/20 border-purple-500/50 text-purple-300 shadow-md'
+                : 'bg-slate-900/40 border-slate-800 text-slate-600 opacity-50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-purple-400" />
+                <span className="font-extrabold text-sm">Learn</span>
+              </div>
+              <span className="text-2xl font-black">{accumulated.learn ? `+${accumulated.learn}` : '0'}</span>
+            </div>
+
+            {/* Love */}
+            <div className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+              accumulated.love
+                ? 'bg-pink-500/20 border-pink-500/50 text-pink-300 shadow-md'
+                : 'bg-slate-900/40 border-slate-800 text-slate-600 opacity-50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <Heart className="w-5 h-5 text-pink-400" />
+                <span className="font-extrabold text-sm">Love</span>
+              </div>
+              <span className="text-2xl font-black">{accumulated.love ? `+${accumulated.love}` : '0'}</span>
+            </div>
+
+            {/* Leisure */}
+            <div className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+              accumulated.leisure
+                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 shadow-md'
+                : 'bg-slate-900/40 border-slate-800 text-slate-600 opacity-50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <Smile className="w-5 h-5 text-emerald-400" />
+                <span className="font-extrabold text-sm">Leisure</span>
+              </div>
+              <span className="text-2xl font-black">{accumulated.leisure ? `+${accumulated.leisure}` : '0'}</span>
+            </div>
+          </div>
+
+          {/* 成長効果の補足ガイド */}
+          <div className="pt-2 border-t border-slate-800 text-left text-[11px] space-y-1">
             {accumulated.labor ? (
-              <p className="text-amber-300 font-semibold flex items-center gap-1">
-                ⚡ 現場での実践(Labor)獲得！ いずれかのポータブルスキルがランダムで +1 偶発的成長します。
+              <p className="text-amber-300 font-semibold">
+                ⚡ Labor獲得: 現場での実践により、いずれかのスキルがランダムで +1 偶発的成長します。
               </p>
             ) : null}
             {accumulated.learn ? (
-              <p className="text-purple-300 font-semibold flex items-center gap-1">
-                💡 学び(Learn +{accumulated.learn})獲得！ 次の画面でポータブルスキルへ手動変換・意味づけできます。
+              <p className="text-purple-300 font-semibold">
+                💡 Learn獲得: 次のステップでポータブルスキルへ手動変換・意味づけが可能です。
               </p>
             ) : null}
           </div>
         </div>
 
+        {/* 決定ボタン */}
         <button
           onClick={handleConfirm}
           className="w-full py-4 rounded-xl font-extrabold text-base text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all active:scale-98"
         >
-          <Sparkles className="w-5 h-5" />
-          この結果を獲得して進む <ArrowRight className="w-5 h-5" />
+          <Sparkles className="w-5 h-5" /> 4Lキューブを獲得して進む <ArrowRight className="w-5 h-5" />
         </button>
       </div>
     </div>

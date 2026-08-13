@@ -242,7 +242,7 @@ export const GameContainer: React.FC = () => {
     setPhase('DRAW_SELECTION');
   };
 
-  // 2. 4Lカード決定
+  // 2. 4Lカード決定（獲得した4Lスコアのみを加算）
   const handleConfirmCards = (selectedCards: Card4L[], finalStats: Partial<FourLStats>) => {
     if (!player) return;
 
@@ -250,30 +250,6 @@ export const GameContainer: React.FC = () => {
     const gainedLearn = finalStats.learn || 0;
     const gainedLove = finalStats.love || 0;
     const gainedLeisure = finalStats.leisure || 0;
-
-    let cardMoneyDiff = 0;
-    let cardHealthDiff = 0;
-
-    selectedCards.forEach((c) => {
-      let mEff = c.moneyEffect || 0;
-      let hEff = c.healthEffect || 0;
-
-      // イオリ(I): 学び費用半額
-      if (player.character.id === 'CHAR_I' && mEff < 0 && c.deck === 'learn') {
-        mEff = Math.ceil(mEff / 2);
-      }
-      // アオイ(A): 余暇の体力回復1.5倍
-      if (player.character.id === 'CHAR_A' && hEff > 0 && c.deck === 'life' && c.stats.leisure) {
-        hEff = Math.floor(hEff * 1.5);
-      }
-      // ソウタ(S): 愛の獲得時体力回復+10
-      if (player.character.id === 'CHAR_S' && c.stats.love) {
-        hEff += 10;
-      }
-
-      cardMoneyDiff += mEff;
-      cardHealthDiff += hEff;
-    });
 
     const updated4L = {
       labor: player.stats4L.labor + gainedLabor,
@@ -292,7 +268,7 @@ export const GameContainer: React.FC = () => {
       gainedLeisure > 0 ? `Leisure +${gainedLeisure}` : ''
     ].filter(Boolean).join(', ');
 
-    addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]${cardMoneyDiff !== 0 ? `, 資金 ${cardMoneyDiff > 0 ? '+' : ''}${cardMoneyDiff}万` : ''}${cardHealthDiff !== 0 ? `, 体力 ${cardHealthDiff > 0 ? '+' : ''}${cardHealthDiff}` : ''}`, 'card');
+    addLog(`4Lキューブ獲得: [ ${statSummary || 'なし'} ]`, 'card');
 
     // ① Labor獲得による偶発的なポータブルスキルランダム成長
     if (gainedLabor > 0) {
