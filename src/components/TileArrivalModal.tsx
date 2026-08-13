@@ -176,7 +176,7 @@ export const TileArrivalModal: React.FC<Props> = ({
               </div>
               <p className="text-[11px] text-slate-300 leading-tight">
                 {isMandatoryVacationEvent
-                  ? '介護のため有給休暇を強制的に消化します。'
+                  ? '介護のため有給休暇を消化。家族との絆が深まります。'
                   : '有休を1回消費し体力回復 (+20 HP)。'}
               </p>
             </div>
@@ -189,7 +189,7 @@ export const TileArrivalModal: React.FC<Props> = ({
                   className="w-full py-2 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 border border-emerald-400 text-xs font-black text-white shadow-lg transition-all flex items-center justify-between"
                 >
                   <span>🌿 {isMandatoryVacationEvent ? '有休消化して対応' : '通常有休'}</span>
-                  <span>体力 +20 HP</span>
+                  <span>{isMandatoryVacationEvent ? '💖 Love +1 獲得' : '体力 +20 HP'}</span>
                 </button>
               ) : (
                 /* 有給残数が0の場合のマネーペナルティボタン */

@@ -203,12 +203,14 @@ export const GameContainer: React.FC = () => {
     const isMandatoryVacationEvent =
       tile.isMandatoryVacationGen === '40s_50s' && player.generation.id === '40s_50s';
 
+    let updated4L = { ...player.stats4L };
+
     if (isMandatoryVacationEvent) {
       if (updatedLeaves.used < updatedLeaves.max) {
-        // 有休が残っている場合: 有休を1回強制消化 & 体力+15回復
+        // 有休が残っている場合: 有休を1回強制消化 & Love +1 獲得！
         updatedLeaves.used += 1;
-        updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + 15);
-        addLog(`🚨【40-50代介護イベント】家族の介護サポートのため有給休暇を強制消化しました（消化: ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+15 HP回復）。`, 'warn');
+        updated4L.love += 1;
+        addLog(`🚨【40-50代介護イベント】家族の介護サポートのため有休を消化し、家族との絆が深まりました（消化: ${updatedLeaves.used}/${updatedLeaves.max}回, 💖 Love +1 獲得！）。`, 'card');
       } else {
         // 有休が無い場合: マネー 10 CR 減少ペナルティ
         updatedMoney = Math.max(0, updatedMoney - 10);
@@ -244,6 +246,7 @@ export const GameContainer: React.FC = () => {
     // プレイヤー状態更新
     setPlayer({
       ...player,
+      stats4L: updated4L,
       money: updatedMoney,
       health: updatedHealth,
       paidLeaves: updatedLeaves
