@@ -180,6 +180,126 @@ export const GuideContent: React.FC<GuideContentProps> = ({
             </div>
           </section>
 
+          {/* Section: 4L Decks Composition Breakdown (山札の4Lカード内訳) */}
+          <section className="space-y-4">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2 border-l-4 border-amber-500 pl-3">
+              🃏 山札の構成（各山札の4Lカード内訳）
+            </h3>
+            <p className="text-xs text-slate-300">
+              各山札は全10枚で構成されており、山札の種類によって得られやすい4Lリソース（Labor / Learn / Love / Leisure）の傾向が異なります。
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* 💼 仕事 (Labor) の山札 */}
+              <div className="glass-panel p-5 rounded-xl border border-orange-500/30 bg-orange-950/10 space-y-2">
+                <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
+                  <span className="font-bold text-orange-400 text-sm flex items-center gap-1.5">
+                    💼 仕事 (Labor) の山札
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 font-bold">計 10枚</span>
+                </div>
+                <p className="text-xs text-slate-300">実務成果と責任を中心に構成された山札。</p>
+                <div className="grid grid-cols-2 gap-1.5 text-xs pt-1 font-semibold">
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Labor +1 : <strong>4枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Labor +2 : <strong>2枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Learn +1 : <strong>2枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Love +1 / Leisure +1 : <strong>各1枚</strong></div>
+                </div>
+                <div className="text-[11px] text-orange-300/80 pt-1">
+                  📊 獲得傾向: <strong>Labor 8pt</strong>, Learn 2pt, Love 1pt, Leisure 1pt
+                </div>
+              </div>
+
+              {/* 📚 学び (Learn) の山札 */}
+              <div className="glass-panel p-5 rounded-xl border border-purple-500/30 bg-purple-950/10 space-y-2">
+                <div className="flex items-center justify-between border-b border-purple-500/30 pb-2">
+                  <span className="font-bold text-purple-400 text-sm flex items-center gap-1.5">
+                    📚 学び (Learn) の山札
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">計 10枚</span>
+                </div>
+                <p className="text-xs text-slate-300">自己研鑽と知識の獲得、発想転換の山札。</p>
+                <div className="grid grid-cols-2 gap-1.5 text-xs pt-1 font-semibold">
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Learn +1 : <strong>3枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Learn +2 : <strong>2枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Leisure +1 : <strong>4枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Love +1 : <strong>1枚</strong></div>
+                </div>
+                <div className="text-[11px] text-purple-300/80 pt-1">
+                  📊 獲得傾向: <strong>Learn 7pt</strong>, Leisure 4pt, Love 1pt
+                </div>
+              </div>
+
+              {/* 💖 ライフ / 関係 (Love) の山札 */}
+              <div className="glass-panel p-5 rounded-xl border border-pink-500/30 bg-pink-950/10 space-y-2">
+                <div className="flex items-center justify-between border-b border-pink-500/30 pb-2">
+                  <span className="font-bold text-pink-400 text-sm flex items-center gap-1.5">
+                    💖 ライフ / 関係 (Love) の山札
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-bold">計 10枚</span>
+                </div>
+                <p className="text-xs text-slate-300">人間関係、家族、共感と仲間との絆の山札。</p>
+                <div className="grid grid-cols-2 gap-1.5 text-xs pt-1 font-semibold">
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Love +1 : <strong>3枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Love +2 : <strong>2枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Leisure +1 : <strong>3枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Learn +1 : <strong>2枚</strong></div>
+                </div>
+                <div className="text-[11px] text-pink-300/80 pt-1">
+                  📊 獲得傾向: <strong>Love 7pt</strong>, Leisure 3pt, Learn 2pt
+                </div>
+              </div>
+
+              {/* 🌴 ライフ / 余暇 (Leisure) の山札 */}
+              <div className="glass-panel p-5 rounded-xl border border-emerald-500/30 bg-emerald-950/10 space-y-2">
+                <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2">
+                  <span className="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
+                    🌴 ライフ / 余暇 (Leisure) の山札
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">計 10枚</span>
+                </div>
+                <p className="text-xs text-slate-300">リフレッシュ、趣味、ウェルビーイングの山札。</p>
+                <div className="grid grid-cols-2 gap-1.5 text-xs pt-1 font-semibold">
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Leisure +1 : <strong>3枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Leisure +2 : <strong>2枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Love +1 : <strong>3枚</strong></div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-white/5">Learn +1 : <strong>2枚</strong></div>
+                </div>
+                <div className="text-[11px] text-emerald-300/80 pt-1">
+                  📊 獲得傾向: <strong>Leisure 7pt</strong>, Love 3pt, Learn 2pt
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section: Game Components Overview (コンポーネントの全容) */}
+          <section className="space-y-4">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2 border-l-4 border-indigo-500 pl-3">
+              🧩 ゲームコンポーネントの全容
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="glass-panel p-4 rounded-xl border border-white/10 space-y-2">
+                <div className="font-bold text-indigo-300 text-sm">🎲 12の盤面マス目</div>
+                <p className="text-slate-300 leading-relaxed">
+                  S字カーブ進行ルート（ルート矢印表示付）。新規事業、資格取得、育児、海外赴任など12の人生イベント。
+                </p>
+              </div>
+
+              <div className="glass-panel p-4 rounded-xl border border-white/10 space-y-2">
+                <div className="font-bold text-indigo-300 text-sm">⚡ リソース & メーター</div>
+                <p className="text-slate-300 leading-relaxed">
+                  💰 資金(CR)、❤️ 体力(HP)、🌴 有休メーター(全3回・最低1回消化義務)。バランス経営が不可欠。
+                </p>
+              </div>
+
+              <div className="glass-panel p-4 rounded-xl border border-white/10 space-y-2">
+                <div className="font-bold text-indigo-300 text-sm">🎯 3つの行動スタンス</div>
+                <p className="text-slate-300 leading-relaxed">
+                  💼 引き受ける / 🔥 かなりがんばる(-15HP, +5CR, ドロー+1) / 🌿 有給を使う(+20HP, 3CR投資でLeisure山ドロー可)。
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* Section: Course & Generations */}
           <section className="space-y-4">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 border-l-4 border-emerald-500 pl-3">
