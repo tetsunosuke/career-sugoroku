@@ -58,14 +58,37 @@ export const GameContainer: React.FC = () => {
   };
 
   // ゲームスタート
-  const handleStartGame = (char: Character, gen: GenerationConfig, course: CourseConfig) => {
-    const newPlayer = createInitialPlayer(char, gen, course);
-    setPlayer(newPlayer);
+  const handleStartGame = (
+    character: Character,
+    generation: GenerationConfig,
+    course: CourseConfig,
+    goal: CareerGoal,
+    lap: number = 1,
+    firstLapSummary?: any
+  ) => {
+    const initialPlayer = createInitialPlayer(character, generation, course, goal, lap, firstLapSummary);
+    setPlayer(initialPlayer);
     setCurrentPosition(0);
-    setPhase('ROLL');
     setTurn(1);
-    setLogs([]);
-    addLog(`【ゲーム開始】キャラ: ${char.name} (${char.riasecType}), 年代: ${gen.name}, コース: ${course.name}`, 'info');
+    setPhase('ROLL');
+    addLog(`🚀 第 ${lap} 周目：【${character.name}】(${character.riasecType}) × 【${generation.name}】 × 【${course.name}】 コースでゲームを開始！`, 'info');
+    addLog(`🎯 あなたが自己決定した目標: 【${goal.title}】（目標達成に向けてスタート！）`, 'card');
+  };
+
+  // 1周目の結果を引き継いで2周目 (リ・キャリア) へ進む
+  const handleStartSecondLap = () => {
+    if (!player) return;
+    const summary = {
+      goalTitle: player.goal.title,
+      achievementRate: computeGoalAchievement(player),
+      money: player.money,
+      stats4L: { ...player.stats4L }
+    };
+
+    // SETUPフェーズに戻して2周目用セットアップ
+    setPhase('SETUP');
+    // フラグ用一時保持
+    (window as any).__firstLapSummary = summary;
   };
 
   // 1. 移動フェーズ (ダイス振り)
@@ -448,7 +471,15 @@ export const GameContainer: React.FC = () => {
       </header>
 
       {/* セットアップダイアログ */}
-      {phase === 'SETUP' && <SetupModal onStart={handleStartGame} />}
+      {phase === 'SETUP' && (
+        <SetupModal
+          onStart={(char, gen, course, goal) => {
+            const firstLapSummary = (window as any).__firstLapSummary;
+            const lap = firstLapSummary ? 2 : 1;
+            handleStartGame(char, gen, course, goal, lap, firstLapSummary);
+          }}
+        />
+      )}
 
       {/* メインゲームレイアウト */}
       {player && phase !== 'SETUP' && (
@@ -574,7 +605,11 @@ export const GameContainer: React.FC = () => {
           completedProjects={projects.filter((p) => p.isCompleted)}
           turn={turn}
           logs={logs}
-          onRestart={() => setPhase('SETUP')}
+          onRestart={() => {
+            delete (window as any).__firstLapSummary;
+            setPhase('SETUP');
+          }}
+          onStartSecondLap={handleStartSecondLap}
         />
       )}
 

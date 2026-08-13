@@ -514,18 +514,6 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
               </div>
             </div>
 
-            {/* 初期コンディション＆資金 */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-center">
-                <span className="text-[11px] font-bold text-amber-400 block">💰 スタート時資金</span>
-                <span className="text-lg font-black text-amber-200">{(previewGen as any).initialMoney ?? 20} 万円</span>
-              </div>
-              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-center">
-                <span className="text-[11px] font-bold text-emerald-400 block">❤️ スタート時体力</span>
-                <span className="text-lg font-black text-emerald-200">{(previewGen as any).initialHealth?.current ?? 100} HP</span>
-              </div>
-            </div>
-
             {/* 決定 / キャンセルボタン */}
             <div className="pt-2 space-y-2">
               <button
@@ -549,8 +537,6 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
       {previewCourse && (
         <div className="modal-overlay z-[140] animate-fadeIn p-4">
           <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-pink-500/50 shadow-2xl bg-slate-950/95 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-
             <div className="text-center space-y-2">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold">
                 <Briefcase className="w-4 h-4" /> キャリア環境コース
@@ -568,37 +554,64 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
               </p>
             </div>
 
-            {/* 特徴ハイライト */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-pink-950/40 to-indigo-950/40 border border-pink-500/30 space-y-2 text-xs text-slate-200">
-              <span className="font-extrabold text-pink-300 block">✨ コース環境効果</span>
-              {previewCourse.id === 'venture' ? (
-                <ul className="space-y-1 list-disc list-inside text-amber-200 font-semibold">
-                  <li>マス移動時、獲得スキルポイント +1pt 加算</li>
-                  <li>成果報酬の資金が高い（仕事・PJで大きく稼げる）</li>
-                  <li>スピード感ある環境のため移動時の体力消費が大きめ</li>
-                </ul>
-              ) : (
-                <ul className="space-y-1 list-disc list-inside text-emerald-200 font-semibold">
-                  <li>「学び」カード獲得時のドロー枚数 +1枚</li>
-                  <li>福利厚生充実（毎ターン体力 +5 HP 自動回復）</li>
-                  <li>毎ターンの安定した基本給手当を獲得</li>
-                </ul>
-              )}
-            </div>
-
             {/* 決定 / キャンセルボタン */}
             <div className="pt-2 space-y-2">
               <button
                 onClick={() => handleSelectPreviewCourse(previewCourse)}
                 className="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-pink-600/30 transition-all flex items-center justify-center gap-2"
               >
-                キャリアシミュレーションを開始する 🚀
+                このコースを選択して次へ <ArrowRight className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setPreviewCourse(null)}
                 className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 ← 他のコースを見る
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* キャリア目標カード拡大表示・詳細確認モーダル */}
+      {previewGoal && (
+        <div className="modal-overlay z-[140] animate-fadeIn p-4">
+          <div className="glass-panel w-full max-w-lg p-6 md:p-8 space-y-6 text-slate-100 border-amber-500/50 shadow-2xl bg-slate-950/95 relative overflow-hidden text-center">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-4xl">{previewGoal.icon}</span>
+              <div className="text-left">
+                <h2 className="text-2xl font-black text-white">{previewGoal.title}</h2>
+                <div className="text-xs font-semibold text-amber-300">{previewGoal.subtitle}</div>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-200 leading-relaxed font-medium bg-slate-900/80 p-4 rounded-2xl border border-white/10 text-left">
+              {previewGoal.description}
+            </p>
+
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/50 to-indigo-950/50 border border-amber-500/40 text-left space-y-2">
+              <span className="text-xs font-extrabold text-amber-300 block">🎯 自己決定する到達目標数値</span>
+              <div className="grid grid-cols-2 gap-2 text-xs font-bold text-slate-200">
+                {previewGoal.target4L.labor && <div className="p-2 rounded bg-orange-500/20 text-orange-300 border border-orange-500/30">Labor: {previewGoal.target4L.labor} pt以上</div>}
+                {previewGoal.target4L.love && <div className="p-2 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30">Love: {previewGoal.target4L.love} pt以上</div>}
+                {previewGoal.target4L.leisure && <div className="p-2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Leisure: {previewGoal.target4L.leisure} pt以上</div>}
+                <div className="p-2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">資金: {previewGoal.targetMoney} CR以上</div>
+                <div className="p-2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">スキル合計: {previewGoal.targetSkillsSum} pt以上</div>
+              </div>
+            </div>
+
+            <div className="pt-2 space-y-2">
+              <button
+                onClick={() => handleSelectPreviewGoal(previewGoal)}
+                className="w-full py-4 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 shadow-xl shadow-amber-600/30 transition-all flex items-center justify-center gap-2"
+              >
+                この目標を自己決定してスタート！ 🚀
+              </button>
+              <button
+                onClick={() => setPreviewGoal(null)}
+                className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                ← 一覧に戻る
               </button>
             </div>
           </div>

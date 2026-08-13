@@ -112,12 +112,33 @@ export interface GameLog {
   timestamp: string;
 }
 
+export interface CareerGoal {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  target4L: Partial<Omit<FourLStats, 'learn'>>; // Labor, Love, Leisure (Learn除外)
+  targetMoney: number;                          // 目標資金 (CR)
+  targetSkillsSum: number;                      // 目標スキル合計pt
+  icon: string;
+}
+
 export type ActionStance = 'normal' | 'hardwork' | 'vacation';
+
+export interface FirstLapSummary {
+  goalTitle: string;
+  achievementRate: number;
+  money: number;
+  stats4L: FourLStats;
+}
 
 export interface PlayerState {
   character: Character;
   generation: GenerationConfig;
   course: CourseConfig;
+  goal: CareerGoal;
+  lap: number; // 周回数 (1周目: 1, 2周目: 2)
+  firstLapSummary?: FirstLapSummary; // 1周目の内省・記録
   position: number;
   stats4L: FourLStats;
   skills: PortableSkills;

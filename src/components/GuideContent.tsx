@@ -479,6 +479,34 @@ export const GuideContent: React.FC<GuideContentProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Theory 05: Self-Determination Theory & Protean Career */}
+          <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/20 to-indigo-950/20 space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 bg-amber-500/20 text-amber-300 font-bold rounded-lg text-xs border border-amber-500/30">理論 05</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white">デシ＆ライアンの「自己決定理論 (SDT)」とダグラス・ホールの「プロティアン・キャリア」</h3>
+            </div>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              キャリアにおける真の幸福とは他者から与えられる均等やバランスではなく、<strong>「自分の価値観に基づき、自分の人生を自ら選択・自己決定した（Autonomy）という実感」</strong>にあります。
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div className="bg-slate-900/80 p-4 rounded-xl border border-amber-500/30 space-y-1">
+                <div className="text-amber-300 font-bold text-sm">🎯 自己決定理論 (SDT)</div>
+                <div className="text-xs text-slate-300">
+                  エドワード・デシとリチャード・ライアンが唱えた動機づけ理論。自律性（自分で決める感覚）が満たされることで最高のモチベーションとウェルビーイングが生まれます。
+                </div>
+              </div>
+              <div className="bg-slate-900/80 p-4 rounded-xl border border-purple-500/30 space-y-1">
+                <div className="text-purple-300 font-bold text-sm">🌟 プロティアン・キャリア ＆ 心理的成功</div>
+                <div className="text-xs text-slate-300">
+                  ダグラス・ホールが提唱。社会や組織の物差し（昇進・給与）ではなく、自身が定めた目標に対する「心理的成功（Psychological Success）」こそがキャリアのゴールであると定めます。
+                </div>
+              </div>
+            </div>
+            <div className="bg-amber-950/40 p-3.5 rounded-xl border border-amber-500/30 text-xs text-amber-200">
+              💡 <strong>ゲームでの学び：</strong> スタート時に自ら選択した「自己決定目標カード」の達成度や、1周目の内省を生かした「2周目 (リ・キャリア)」の再構築により、自律的キャリア形成の真髄を体験します。
+            </div>
+          </div>
         </div>
       )}
     </div>

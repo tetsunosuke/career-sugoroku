@@ -8,29 +8,87 @@ import type {
   SkillType,
   DeckType,
   Card4L,
-  CoOpProject
+  CoOpProject,
+  CareerGoal,
+  FirstLapSummary
 } from '../types/game';
 import { WORK_DECK, LEARN_DECK, LIFE_DECK } from '../data/decks';
+import { CAREER_GOALS } from '../data/goals';
 
 export function createInitialPlayer(
   character: Character,
   generation: GenerationConfig & { initialMoney?: number; initialHealth?: { current: number; max: number } },
-  course: CourseConfig
+  course: CourseConfig,
+  goal?: CareerGoal,
+  lap: number = 1,
+  firstLapSummary?: FirstLapSummary
 ): PlayerState {
   const initialMoney = generation.initialMoney ?? 20;
   const initialHealth = generation.initialHealth ?? { current: 100, max: 100 };
+  const activeGoal = goal || CAREER_GOALS[0];
+
+  // 2周目（リ・キャリア）プレイ時は1周目の経験によりポータブルスキル初期値に+1ボーナス！
+  const initialSkills = { ...generation.initialSkills };
+  if (lap > 1) {
+    initialSkills.interpersonal += 1;
+    initialSkills.thinking += 1;
+    initialSkills.execution += 1;
+    initialSkills.flexibility += 1;
+  }
 
   return {
     character,
     generation,
     course,
+    goal: activeGoal,
+    lap,
+    firstLapSummary,
     position: 0,
     stats4L: { ...generation.initial4L },
-    skills: { ...generation.initialSkills },
+    skills: initialSkills,
     money: initialMoney,
     health: { ...initialHealth },
     paidLeaves: { used: 0, max: 3 }
   };
+}
+
+/**
+ * 自己決定目標の達成率(%)を算定
+ */
+export function computeGoalAchievement(player: PlayerState): number {
+  const { goal, stats4L, money, skills } = player;
+  let totalScore = 0;
+  let maxScore = 0;
+
+  // 4Lターゲット比較 (Labor, Love, Leisure)
+  if (goal.target4L.labor) {
+    maxScore += 100;
+    totalScore += Math.min(100, (stats4L.labor / goal.target4L.labor) * 100);
+  }
+  if (goal.target4L.love) {
+    maxScore += 100;
+    totalScore += Math.min(100, (stats4L.love / goal.target4L.love) * 100);
+  }
+  if (goal.target4L.leisure) {
+    maxScore += 100;
+    totalScore += Math.min(100, (stats4L.leisure / goal.target4L.leisure) * 100);
+  }
+
+  // 資金ターゲット比較
+  if (goal.targetMoney) {
+    maxScore += 100;
+    totalScore += Math.min(100, (money / goal.targetMoney) * 100);
+  }
+
+  // ポータブルスキル合計比較
+  if (goal.targetSkillsSum) {
+    const skillSum = skills.interpersonal + skills.thinking + skills.execution + skills.flexibility;
+    maxScore += 100;
+    totalScore += Math.min(100, (skillSum / goal.targetSkillsSum) * 100);
+  }
+
+  if (maxScore === 0) return 100;
+  return Math.round(totalScore / (maxScore / 100));
 }
 
 /**

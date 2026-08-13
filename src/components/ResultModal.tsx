@@ -119,6 +119,50 @@ export const ResultModal: React.FC<Props> = ({
     });
   }, []);
 
+import React, { useState, useEffect } from 'react';
+import type { PlayerState, GameLog } from '../types/game';
+import { computeGoalAchievement } from '../logic/gameEngine';
+import { Trophy, Sparkles, Target, RotateCcw, Award, CheckCircle2 } from 'lucide-react';
+import { RadarChart } from './RadarChart';
+
+interface Props {
+  player: PlayerState;
+  logs: GameLog[];
+  onRestart: () => void;
+  onStartSecondLap?: () => void;
+}
+
+export const ResultModal: React.FC<Props> = ({
+  player,
+  logs,
+  onRestart,
+  onStartSecondLap
+}) => {
+  const { character, stats4L, skills } = player;
+
+  useEffect(() => {
+    // コンフェッティ（紙吹雪）紙吹雪エフェクト演出
+    const container = document.body;
+    const colors = ['#f43f5e', '#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'];
+    
+    for (let i = 0; i < 40; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti-piece';
+      confetti.style.left = `${Math.random() * 100}vw`;
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+      confetti.style.animationDelay = `${Math.random() * 1}s`;
+      container.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 5000);
+    }
+  }, []);
+
+  // 自己決定目標達成率
+  const achievementRate = computeGoalAchievement(player);
+
   // 称号判定
   const total4L = stats4L.labor + stats4L.learn + stats4L.love + stats4L.leisure;
   const { labor, learn, love, leisure } = stats4L;
@@ -154,8 +198,20 @@ export const ResultModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay z-[130]">
       <div className="glass-panel w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 md:p-8 space-y-6 text-slate-100 border-indigo-500/30 text-center custom-scrollbar">
+        {/* 周回数ヘッダー */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+            {player.lap === 1 ? '第 1 周目 キャリア結果' : '第 2 周目 リ・キャリア達成結果 🌟'}
+          </span>
+          {player.firstLapSummary && (
+            <span className="text-xs text-slate-400">
+              1周目目標達成率: {player.firstLapSummary.achievementRate}%
+            </span>
+          )}
+        </div>
+
         <div className="space-y-3">
           <div className="relative w-20 h-20 mx-auto">
             <img
@@ -183,6 +239,21 @@ export const ResultModal: React.FC<Props> = ({
           <p className="text-xs text-slate-400">
             {character.name}（{character.riasecType}）としてのキャリア達成レポート
           </p>
+
+          {/* 自己決定目標達成率（メインハイライト） */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-indigo-950/60 border-2 border-amber-500/50 shadow-xl text-left space-y-2 relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black text-amber-300 flex items-center gap-1.5 uppercase tracking-wider">
+                <Target className="w-4 h-4 text-amber-400" /> 自己決定目標: 【{player.goal?.title || 'プロフェッショナル型'}】
+              </span>
+              <span className="text-2xl font-black text-amber-300">
+                {achievementRate}% <span className="text-xs text-amber-200 font-bold">達成</span>
+              </span>
+            </div>
+            <p className="text-xs text-slate-200 leading-relaxed bg-slate-950/50 p-3 rounded-xl border border-white/5">
+              🎓 <strong>心理的成功（Psychological Success）評価:</strong> 他者の押し付けではなく、あなたがゲームスタート時に自ら設定した「{player.goal?.title}」の軸に対する自己決定達成度です。
+            </p>
+          </div>
 
           {/* 総資産 ＆ 健康度 ＆ 有休サマリー */}
           <div className="grid grid-cols-3 gap-3 max-w-md mx-auto pt-1">
@@ -290,12 +361,34 @@ export const ResultModal: React.FC<Props> = ({
           )}
         </div>
 
-        <button
-          onClick={onRestart}
-          className="w-full py-4 rounded-xl font-extrabold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all"
-        >
-          <RefreshCw className="w-5 h-5" /> もう一度プレイする
-        </button>
+        {/* ボタンエリア */}
+        <div className="pt-2 space-y-2">
+          {player.lap === 1 && onStartSecondLap ? (
+            <button
+              onClick={onStartSecondLap}
+              className="w-full py-4 rounded-xl font-black text-lg text-white bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 shadow-xl shadow-amber-500/30 flex items-center justify-center gap-2 transition-all transform hover:scale-[1.01]"
+            >
+              <RotateCcw className="w-5 h-5 text-amber-300" />
+              1周目の内省を生かして「2周目 (リ・キャリア)」へ進む 🌟
+            </button>
+          ) : (
+            <button
+              onClick={onRestart}
+              className="w-full py-4 rounded-xl font-extrabold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all"
+            >
+              <RotateCcw className="w-5 h-5" /> もう一度最初からプレイする
+            </button>
+          )}
+
+          {player.lap === 1 && (
+            <button
+              onClick={onRestart}
+              className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              リセットして最初から選び直す
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
