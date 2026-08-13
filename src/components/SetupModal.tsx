@@ -394,6 +394,90 @@ export const SetupModal: React.FC<Props> = ({ onStart }) => {
             </div>
           </div>
         )}
+
+        {/* ===== STEP 4: 自己決定キャリア目標選択 ===== */}
+        {step === 'goal' && (
+          <div className="space-y-5 animate-fadeIn">
+            <div className="text-center">
+              <h2 className="text-lg font-bold flex items-center justify-center gap-2 text-amber-300">
+                <Target className="w-5 h-5" /> 4. 自律的キャリア目標を選択
+              </h2>
+              <p className="text-xs text-slate-300 mt-1">
+                ★ 心理学・自己決定理論(SDT)に基づく最も重要なステップ。あなたがどんな人生・成果を目指すか自己決定してください。
+              </p>
+            </div>
+
+            {/* 選択済みキャラ・年代・コース */}
+            {selectedChar && selectedGen && selectedCourse && (
+              <div className="flex items-center justify-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800 mx-auto max-w-lg text-xs font-bold text-slate-200">
+                <span className="text-indigo-300">{selectedChar.name}</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-purple-300">{selectedGen.name}</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-pink-300">{selectedCourse.name}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {CAREER_GOALS.map((goal) => {
+                const isSelected = selectedGoal?.id === goal.id;
+                return (
+                  <div
+                    key={goal.id}
+                    onClick={() => {
+                      setSelectedGoal(goal);
+                      setPreviewGoal(goal);
+                    }}
+                    className={`cursor-pointer p-5 rounded-xl border transition-all duration-200 glass-panel-interactive flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-amber-500 bg-amber-950/40 ring-2 ring-amber-500/50 shadow-lg shadow-amber-500/10 scale-[1.02]'
+                        : 'border-slate-700/60 bg-slate-900/40 opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">{goal.icon}</span>
+                          <div>
+                            <h3 className="font-bold text-base text-white">{goal.title}</h3>
+                            <span className="text-[11px] text-amber-300 font-semibold">{goal.subtitle}</span>
+                          </div>
+                        </div>
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0" />}
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed mt-2">{goal.description}</p>
+                    </div>
+
+                    <div className="mt-4 pt-2 border-t border-slate-800 text-[10px] text-amber-300 font-bold flex justify-between items-center">
+                      <span>目標到達条件を確認</span>
+                      <span>🔍 拡大して見る</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="pt-2 flex items-center justify-center gap-3">
+              <button
+                onClick={() => setStep('course')}
+                className="px-6 py-3 rounded-xl text-sm font-bold text-slate-300 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 transition-all"
+              >
+                ← 戻る
+              </button>
+              <button
+                onClick={handleGoalConfirm}
+                disabled={!selectedGoal}
+                className={`px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-2 transition-all duration-200 ${
+                  selectedGoal
+                    ? 'text-white bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 shadow-xl shadow-amber-500/30 hover:-translate-y-0.5'
+                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                }`}
+              >
+                🚀 この条件で人生シミュレーションを開始する
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* キャラクター拡大表示・詳細確認モーダル */}
