@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import type { PlayerState, CoOpProject, GameLog } from '../types/game';
-import confetti from 'canvas-confetti';
-import { Trophy, Sparkles, RefreshCw, Award, HeartHandshake, History } from 'lucide-react';
+import { computeGoalAchievement } from '../logic/gameEngine';
+import { Trophy, Sparkles, Target, RotateCcw, Award, HeartHandshake, History, CheckCircle2 } from 'lucide-react';
+import { RadarChart } from './RadarChart';
 
 interface Props {
   player: PlayerState;
@@ -9,131 +10,13 @@ interface Props {
   turn: number;
   logs: GameLog[];
   onRestart: () => void;
-}
-
-const RadarChart: React.FC<{ stats: { labor: number, learn: number, love: number, leisure: number } }> = ({ stats }) => {
-  const max = 15;
-  const r = 90;
-  const center = 140;
-
-  const getPoint = (val: number, angleDeg: number) => {
-    const ratio = Math.min(val, max) / max;
-    const rad = (angleDeg - 90) * (Math.PI / 180);
-    return {
-      x: center + ratio * r * Math.cos(rad),
-      y: center + ratio * r * Math.sin(rad)
-    };
-  };
-
-  const pts = [
-    getPoint(stats.labor, 0),
-    getPoint(stats.learn, 90),
-    getPoint(stats.love, 180),
-    getPoint(stats.leisure, 270)
-  ];
-
-  const polyPoints = pts.map(p => `${p.x},${p.y}`).join(' ');
-
-  const axes = [
-    { label: 'Labor', color: '#f97316', angle: 0 },
-    { label: 'Learn', color: '#a855f7', angle: 90 },
-    { label: 'Love', color: '#ec4899', angle: 180 },
-    { label: 'Leisure', color: '#10b981', angle: 270 }
-  ];
-
-  const guides = [0.33, 0.66, 1];
-
-  return (
-    <svg width="280" height="280" className="mx-auto overflow-visible">
-      <defs>
-        <linearGradient id="polyGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#818cf8" />
-          <stop offset="100%" stopColor="#c084fc" />
-        </linearGradient>
-      </defs>
-      
-      {/* Guides */}
-      {guides.map((ratio, i) => {
-        const guidePts = axes.map(a => {
-          const pt = getPoint(max * ratio, a.angle);
-          return `${pt.x},${pt.y}`;
-        }).join(' ');
-        return (
-          <polygon key={i} points={guidePts} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray={i < 2 ? "2,2" : "none"} />
-        );
-      })}
-
-      {/* Axes */}
-      {axes.map((a, i) => {
-        const pt = getPoint(max, a.angle);
-        return (
-          <line key={i} x1={center} y1={center} x2={pt.x} y2={pt.y} stroke="#475569" strokeWidth="1" />
-        );
-      })}
-
-      {/* Data Polygon */}
-      <polygon points={polyPoints} fill="url(#polyGrad)" fillOpacity="0.3" stroke="#818cf8" strokeWidth="2" />
-
-      {/* Data Points */}
-      {pts.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r="4" fill={axes[i].color} />
-      ))}
-
-      {/* Labels */}
-      {axes.map((a, i) => {
-        const pt = getPoint(max + 2.5, a.angle);
-        return (
-          <text 
-            key={i} 
-            x={pt.x} 
-            y={pt.y} 
-            fill={a.color} 
-            fontSize="12" 
-            fontWeight="bold"
-            textAnchor="middle" 
-            dominantBaseline="middle"
-          >
-            {a.label}
-          </text>
-        );
-      })}
-    </svg>
-  );
-};
-
-export const ResultModal: React.FC<Props> = ({
-  player,
-  completedProjects,
-  turn,
-  logs,
-  onRestart
-}) => {
-  const { character, stats4L, skills } = player;
-
-  useEffect(() => {
-    // 紙吹雪エフェクト
-    confetti({
-      particleCount: 120,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-  }, []);
-
-import React, { useState, useEffect } from 'react';
-import type { PlayerState, GameLog } from '../types/game';
-import { computeGoalAchievement } from '../logic/gameEngine';
-import { Trophy, Sparkles, Target, RotateCcw, Award, CheckCircle2 } from 'lucide-react';
-import { RadarChart } from './RadarChart';
-
-interface Props {
-  player: PlayerState;
-  logs: GameLog[];
-  onRestart: () => void;
   onStartSecondLap?: () => void;
 }
 
 export const ResultModal: React.FC<Props> = ({
   player,
+  completedProjects,
+  turn,
   logs,
   onRestart,
   onStartSecondLap

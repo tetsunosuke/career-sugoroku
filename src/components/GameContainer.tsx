@@ -10,7 +10,8 @@ import type {
   SkillType,
   CoOpProject,
   GameLog,
-  DeckType
+  DeckType,
+  CareerGoal
 } from '../types/game';
 import { BOARD_TILES } from '../data/boards';
 import { COOP_PROJECTS } from '../data/projects';
@@ -19,7 +20,8 @@ import {
   createInitialPlayer,
   getDeckCards,
   getDrawCount,
-  getRandomSkill
+  getRandomSkill,
+  computeGoalAchievement
 } from '../logic/gameEngine';
 
 import { HeaderNav } from './HeaderNav';
