@@ -471,9 +471,9 @@ export const GameContainer: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl font-black bg-gradient-to-r from-indigo-300 via-purple-200 to-pink-300 bg-clip-text text-transparent">
-              4Lキャリアクエスト
+              キャリア・キルト・クエスト
             </h1>
-            <p className="text-xs text-slate-400">自律型キャリアシミュレーション Web App</p>
+            <p className="text-xs text-slate-400">〜4L自律型人生シミュレーション〜</p>
           </div>
         </div>
 

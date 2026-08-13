@@ -15,9 +15,9 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ activeTab, onOpenModal }) 
           </div>
           <div>
             <h1 className="text-lg font-bold text-white leading-none tracking-wide group-hover:text-indigo-300 transition-colors">
-              4Lキャリアクエスト
+              キャリア・キルト・クエスト
             </h1>
-            <span className="text-xs text-slate-400 font-medium">4L Career Quest</span>
+            <span className="text-xs text-slate-400 font-medium">Career Quilt Quest</span>
           </div>
         </a>
 
