@@ -181,8 +181,56 @@ export const GameContainer: React.FC = () => {
     setPhase('ROLL');
   };
 
-  // マス拡大説明から山札ドロー実行
-  const handleStartDraw = () => {
+  // マス拡大・出来事モーダルから行動スタンスを選択
+  const handleSelectStance = (stance: ActionStance) => {
+    if (!player) return;
+    const tile = BOARD_TILES[currentPosition];
+    const targetDeck: DeckType = tile.deck === 'choice' ? 'any' : tile.deck;
+
+    let { drawCount, selectCount, multiplier, skillBonusApplied, skillBonusText } = getDrawCount(
+      player.generation,
+      player.course,
+      targetDeck,
+      player.skills,
+      tile
+    );
+
+    let updatedHealth = { ...player.health };
+    let updatedMoney = player.money;
+    let updatedLeaves = { ...player.paidLeaves };
+
+    if (stance === 'hardwork') {
+      // かなりがんばってみる: 体力-15 HP, 資金+5 CR, ドロー枚数+1枚
+      updatedHealth.current = Math.max(0, updatedHealth.current - 15);
+      updatedMoney += 5;
+      drawCount += 1;
+      addLog(`🔥 スタンス【かなりがんばってみる】を選択！（体力-15 HP, 資金+5 CR, ドローカード+1枚）`, 'warn');
+    } else if (stance === 'vacation') {
+      // 有給を使う: 有休消化+1回, 体力+20 HP回復, 資金消費0, ドロー1枚
+      updatedLeaves.used = Math.min(updatedLeaves.max, updatedLeaves.used + 1);
+      updatedHealth.current = Math.min(updatedHealth.max, updatedHealth.current + 20);
+      drawCount = 1;
+      selectCount = 1;
+      addLog(`🌿 スタンス【有給を使う】を選択！（有休消化 ${updatedLeaves.used}/${updatedLeaves.max}回, 体力+20 HP回復）`, 'info');
+    } else {
+      addLog(`💼 スタンス【引き受ける】を選択。（順当に業務・活動に対応）`, 'info');
+    }
+
+    // プレイヤー状態更新
+    setPlayer({
+      ...player,
+      money: updatedMoney,
+      health: updatedHealth,
+      paidLeaves: updatedLeaves
+    });
+
+    const cards = getDeckCards(targetDeck, drawCount);
+
+    setDrawnCards(cards);
+    setCurrentDrawParams({ selectCount, multiplier });
+    setPendingSkillBasePt(tile.skillPt);
+    setForcedSkill(tile.isSpecialSkillAlloc);
+
     setPhase('DRAW_SELECTION');
   };
 
@@ -422,15 +470,15 @@ export const GameContainer: React.FC = () => {
         </div>
       )}
 
-      {/* マス到着・拡大説明ダイアログ */}
+      {/* マス到着・拡大説明・スタンス選択ダイアログ */}
       {phase === 'TILE_ARRIVAL' && player && (
         <TileArrivalModal
           tile={BOARD_TILES[currentPosition]}
           skills={player.skills}
-          drawCount={drawnCards.length}
+          baseDrawCount={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).drawCount}
           skillBonusApplied={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).skillBonusApplied}
-          skillBonusText={getDrawCount(player.generation, player.course, BOARD_TILES[currentPosition].deck === 'choice' ? 'any' : BOARD_TILES[currentPosition].deck, player.skills, BOARD_TILES[currentPosition]).skillBonusText}
-          onDrawCards={handleStartDraw}
+          paidLeaves={player.paidLeaves || { used: 0, max: 3 }}
+          onSelectStance={handleSelectStance}
         />
       )}
 

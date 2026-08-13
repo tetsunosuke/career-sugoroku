@@ -111,6 +111,8 @@ export interface GameLog {
   timestamp: string;
 }
 
+export type ActionStance = 'normal' | 'hardwork' | 'vacation';
+
 export interface PlayerState {
   character: Character;
   generation: GenerationConfig;
@@ -118,9 +120,13 @@ export interface PlayerState {
   position: number;
   stats4L: FourLStats;
   skills: PortableSkills;
-  money: number; // 資金 (万円)
+  money: number; // 資金 (CR)
   health: {
     current: number; // 現在の体力
     max: number;     // 最大体力
+  };
+  paidLeaves: {
+    used: number; // 消化した有給回数
+    max: number;  // 全体での上限回数（3回）
   };
 }

@@ -19,7 +19,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 8,
     healthEffect: -12,
-    effectDescription: '未知の事業立ち上げを牽引！（報奨金+8万 / 体力-12）',
+    effectDescription: '未知の事業立ち上げを牽引！（報奨金 +8 CR / 体力-12）',
     skillCondition: {
       skill: 'execution',
       threshold: 3,
@@ -35,7 +35,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 6,
     healthEffect: -8,
-    effectDescription: 'プロセスの効率化に貢献。（インセンティブ+6万 / 体力-8）',
+    effectDescription: 'プロセスの効率化に貢献。（インセンティブ +6 CR / 体力-8）',
     skillCondition: {
       skill: 'thinking',
       threshold: 3,
@@ -51,7 +51,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 2,
     moneyEffect: -5,
     healthEffect: -5,
-    effectDescription: '先端ナレッジを習得。（研修費-5万 / 体力-5）'
+    effectDescription: '先端ナレッジを習得。（研修費 -5 CR / 体力-5）'
   },
   {
     id: 4,
@@ -61,7 +61,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 2,
     moneyEffect: -4,
     healthEffect: -5,
-    effectDescription: '専門資格で信頼性を証明。（受験料-4万 / 体力-5）',
+    effectDescription: '専門資格で信頼性を証明。（受験料 -4 CR / 体力-5）',
     skillCondition: {
       skill: 'thinking',
       threshold: 4,
@@ -77,7 +77,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 3,
     healthEffect: -10,
-    effectDescription: '組織の結束力を高める。（手当+3万 / 体力-10）',
+    effectDescription: '組織の結束力を高める。（手当 +3 CR / 体力-10）',
     skillCondition: {
       skill: 'interpersonal',
       threshold: 3,
@@ -93,7 +93,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: -3,
     healthEffect: 15,
-    effectDescription: '大切な人との時間を優先。（支出-3万 / 体力+15回復）'
+    effectDescription: '大切な人との時間を優先。（支出 -3 CR / 体力+15回復）'
   },
   {
     id: 7,
@@ -103,7 +103,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: -2,
     healthEffect: 12,
-    effectDescription: '社外での人間関係を拡大。（交通費等-2万 / 体力+12回復）',
+    effectDescription: '社外での人間関係を拡大。（交通費等 -2 CR / 体力+12回復）',
     skillCondition: {
       skill: 'interpersonal',
       threshold: 3,
@@ -119,7 +119,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 2,
     moneyEffect: 10,
     healthEffect: -15,
-    effectDescription: '国際的視野を養う。（海外手当+10万 / 体力-15）',
+    effectDescription: '国際的視野を養う。（海外手当 +10 CR / 体力-15）',
     skillCondition: {
       skill: 'flexibility',
       threshold: 3,
@@ -135,7 +135,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 7,
     healthEffect: -10,
-    effectDescription: '新たな才能を開花！（副業収入+7万 / 体力-10 / コース変更可能）',
+    effectDescription: '新たな才能を開花！（副業収入 +7 CR / 体力-10 / コース変更可能）',
     canChangeCourse: true,
     skillCondition: {
       skill: 'flexibility',
@@ -152,7 +152,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 2,
     healthEffect: -12,
-    effectDescription: '予期せぬ環境変化！（準備金+2万 / 体力-12 / 「柔軟」スキル強制）',
+    effectDescription: '予期せぬ環境変化！（準備金 +2 CR / 体力-12 / 「柔軟」スキル強制）',
     isSpecialSkillAlloc: 'flexibility'
   },
   {
@@ -163,7 +163,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: 4,
     healthEffect: -5,
-    effectDescription: '次世代を育成。（指導手当+4万 / 体力-5）',
+    effectDescription: '次世代を育成。（指導手当 +4 CR / 体力-5）',
     skillCondition: {
       skill: 'interpersonal',
       threshold: 4,
@@ -179,7 +179,7 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 0,
     moneyEffect: 20,
     healthEffect: 35,
-    effectDescription: 'これまでの歩みを振り返る総仕上げ！（特別ボーナス+20万 / 体力+35回復）',
+    effectDescription: 'これまでの歩みを振り返る総仕上げ！（特別ボーナス +20 CR / 体力+35回復）',
     directCubeReward: true
   }
 ];

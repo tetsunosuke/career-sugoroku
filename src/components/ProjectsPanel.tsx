@@ -77,7 +77,7 @@ export const ProjectsPanel: React.FC<Props> = ({
                     )}
                     {proj.reqMoney && (
                       <span className={`px-1.5 py-0.5 rounded font-semibold ${money >= proj.reqMoney ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-950 text-rose-400 border border-rose-800'}`}>
-                        資金 {money}/{proj.reqMoney}万
+                        資金 {money}/{proj.reqMoney} CR
                       </span>
                     )}
                     {proj.reqHealth && (
@@ -98,9 +98,9 @@ export const ProjectsPanel: React.FC<Props> = ({
                     {proj.reward4L.learn && <span>Learn+{proj.reward4L.learn}</span>}
                     {proj.reward4L.love && <span>Love+{proj.reward4L.love}</span>}
                     {proj.reward4L.leisure && <span>Leisure+{proj.reward4L.leisure}</span>}
-                    {proj.rewardMoney && <span className="text-amber-300 font-bold">💰+{proj.rewardMoney}万</span>}
+                    {proj.rewardMoney && <span className="text-amber-300 font-bold">資金+{proj.rewardMoney} CR</span>}
                     {proj.rewardHealth && <span className="text-emerald-300 font-bold">❤️+{proj.rewardHealth}</span>}
-                    {character.id === 'CHAR_E' && <span className="text-amber-300 font-bold">(エイジ特権 +5万/+14L)</span>}
+                    {character.id === 'CHAR_E' && <span className="text-amber-300 font-bold">(エイジ特権 +5 CR/+14L)</span>}
                   </div>
                 </div>
 

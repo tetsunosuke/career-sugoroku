@@ -122,6 +122,8 @@ export const ResultModal: React.FC<Props> = ({
   // 称号判定
   const total4L = stats4L.labor + stats4L.learn + stats4L.love + stats4L.leisure;
   const { labor, learn, love, leisure } = stats4L;
+  const isLaborLawViolated = (player.paidLeaves?.used ?? 0) === 0;
+
   let title = 'バランス型アジリティ・リーダー';
   
   if (labor >= 12 && learn >= 12) title = '知と実行を兼ね備えたプロフェッショナル';
@@ -135,6 +137,10 @@ export const ResultModal: React.FC<Props> = ({
   else if (love >= 12) title = '人間関係・エンゲージメントマスター (Love特化)';
   else if (leisure >= 12) title = 'ウェルビーイング探求家 (Leisure特化)';
   else if (total4L >= 30) title = 'オールラウンド・キャリブレーション';
+
+  if (isLaborLawViolated) {
+    title = `⚠️ ワーカホリック（有休未消化労基違反）: ${title}`;
+  }
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -178,17 +184,30 @@ export const ResultModal: React.FC<Props> = ({
             {character.name}（{character.riasecType}）としてのキャリア達成レポート
           </p>
 
-          {/* 総資産 ＆ 健康度サマリー */}
-          <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto pt-1">
+          {/* 総資産 ＆ 健康度 ＆ 有休サマリー */}
+          <div className="grid grid-cols-3 gap-3 max-w-md mx-auto pt-1">
             <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30">
-              <span className="text-[11px] font-bold text-amber-400 block">💰 最終獲得資金</span>
-              <span className="text-xl font-black text-amber-200">{player.money} 万円</span>
+              <span className="text-[11px] font-bold text-amber-400 block">💰 最終資金</span>
+              <span className="text-lg font-black text-amber-200">{player.money} CR</span>
             </div>
             <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
-              <span className="text-[11px] font-bold text-emerald-400 block">❤️ 最終コンディション</span>
-              <span className="text-xl font-black text-emerald-200">{player.health.current} HP <span className="text-xs text-slate-400">/ {player.health.max}</span></span>
+              <span className="text-[11px] font-bold text-emerald-400 block">❤️ コンディション</span>
+              <span className="text-lg font-black text-emerald-200">{player.health.current} HP</span>
+            </div>
+            <div className={`p-3 rounded-xl border ${isLaborLawViolated ? 'bg-rose-950/50 border-rose-500/60' : 'bg-indigo-950/40 border-indigo-500/30'}`}>
+              <span className={`text-[11px] font-bold block ${isLaborLawViolated ? 'text-rose-400' : 'text-indigo-300'}`}>🌴 有休消化</span>
+              <span className={`text-lg font-black ${isLaborLawViolated ? 'text-rose-300 animate-pulse' : 'text-indigo-200'}`}>
+                {player.paidLeaves?.used ?? 0} / 3 回
+              </span>
             </div>
           </div>
+
+          {/* 労基違反警告 */}
+          {isLaborLawViolated && (
+            <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/50 text-xs font-bold text-rose-300 animate-fadeIn">
+              ⚠️ 労働基準法違反警告: 有給休暇が1回も消化されていません！ワークライフバランスの改善が必要です。
+            </div>
+          )}
         </div>
 
         {/* 獲得称号 */}

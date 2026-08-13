@@ -64,31 +64,29 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
         </div>
       </div>
 
-      {/* 資金・体力 パラメーター */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 資金・体力・有休 パラメーター */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {/* 資金 */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-amber-500/30 flex items-center justify-between">
-          <div>
-            <span className="text-xs font-semibold text-amber-400 flex items-center gap-1">
-              💰 資金 (資産)
-            </span>
-            <span className="text-xl font-black text-amber-300">
-              {player.money} <span className="text-xs font-normal text-amber-200">万円</span>
-            </span>
-          </div>
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-amber-500/30">
+          <span className="text-[11px] font-semibold text-amber-400 block truncate">
+            💰 資金 (CR)
+          </span>
+          <span className="text-lg font-black text-amber-300">
+            {player.money} <span className="text-[10px] font-normal text-amber-200">CR</span>
+          </span>
         </div>
 
         {/* 体力 */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-emerald-500/30 space-y-1">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-emerald-400 flex items-center gap-1">
-              ❤️ 体力 (コンディション)
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/30 space-y-1">
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="font-semibold text-emerald-400 truncate">
+              ❤️ 体力
             </span>
-            <span className="font-bold text-white">
-              {player.health.current} / {player.health.max}
+            <span className="font-bold text-white text-[10px]">
+              {player.health.current} HP
             </span>
           </div>
-          <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden border border-emerald-900">
+          <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden border border-emerald-900">
             <div
               className={`h-full transition-all duration-500 ${
                 (player.health.current / player.health.max) < 0.3
@@ -98,13 +96,23 @@ export const StatusPanel: React.FC<Props> = ({ player, turn }) => {
               style={{ width: `${Math.max(0, Math.min(100, (player.health.current / player.health.max) * 100))}%` }}
             />
           </div>
-          {(player.health.current / player.health.max) < 0.3 && (
-            <span className="text-[10px] font-bold text-rose-400 block animate-pulse">
-              ⚠️ 体力低下中！余暇や愛で回復を
-            </span>
-          )}
+        </div>
+
+        {/* 有休 */}
+        <div className="p-2.5 rounded-xl bg-slate-900/80 border border-indigo-500/30">
+          <span className="text-[11px] font-semibold text-indigo-300 block truncate">
+            🌴 有給消化
+          </span>
+          <span className="text-base font-black text-indigo-200">
+            {player.paidLeaves?.used ?? 0} <span className="text-[10px] text-slate-400 font-normal">/ {player.paidLeaves?.max ?? 3}回</span>
+          </span>
         </div>
       </div>
+      {(player.health.current / player.health.max) < 0.3 && (
+        <span className="text-[10px] font-bold text-rose-400 block animate-pulse">
+          ⚠️ 体力低下中！余暇や愛で回復を
+        </span>
+      )}
 
       {/* 4L パラメーター */}
       <div className="space-y-3">

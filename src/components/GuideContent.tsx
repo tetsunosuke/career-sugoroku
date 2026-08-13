@@ -103,8 +103,8 @@ export const GuideContent: React.FC<GuideContentProps> = ({
                 { type: 'I（研究的）', name: 'イオリ', favored: '思考スキル', perk: '「思考」スキル獲得 pt +1 ボーナス ＆ 受講費50%割引', icon: '🔍', color: 'border-cyan-500/40 bg-cyan-950/10' },
                 { type: 'A（芸術的）', name: 'アオイ', favored: '柔軟スキル', perk: '「柔軟」スキル獲得 pt +1 ボーナス ＆ 体力回復1.5倍', icon: '🎨', color: 'border-purple-500/40 bg-purple-950/10' },
                 { type: 'S（社会的）', name: 'ソウタ', favored: '対人スキル', perk: '「対人」スキル獲得 pt +1 ボーナス ＆ 愛で体力+10回復', icon: '🤝', color: 'border-blue-500/40 bg-blue-950/10' },
-                { type: 'E（企業的）', name: 'エイジ', favored: 'プロジェクト推進', perk: '協力プロジェクト達成時、全4L+1 ＆ 報酬資金+5万円', icon: '🚀', color: 'border-red-500/40 bg-red-950/10' },
-                { type: 'C（慣習的）', name: 'チヒロ', favored: 'プロセス・効率', perk: '4Lからスキルへの変換効率+1 ＆ 毎ターン手当+2万円', icon: '📊', color: 'border-emerald-500/40 bg-emerald-950/10' }
+                { type: 'E（企業的）', name: 'エイジ', favored: 'プロジェクト推進', perk: '協力プロジェクト達成時、全4L+1 ＆ 報酬資金 +5 CR', icon: '🚀', color: 'border-red-500/40 bg-red-950/10' },
+                { type: 'C（慣習的）', name: 'チヒロ', favored: 'プロセス・効率', perk: '4Lからスキルへの変換効率+1 ＆ 毎ターン手当 +2 CR', icon: '📊', color: 'border-emerald-500/40 bg-emerald-950/10' }
               ].map((c, i) => (
                 <div key={i} className={`glass-panel p-4 rounded-xl border ${c.color} flex flex-col justify-between`}>
                   <div>

@@ -42,7 +42,7 @@ export const CHARACTERS: Character[] = [
     name: 'エイジ',
     riasecType: 'E（企業的）',
     description: '事業の機会を見出し、人を巻き込んで価値を生み出すアントレプレナー。',
-    perkText: '協力プロジェクト達成時、全4L+1 ＆ 報酬資金+5万円ボーナス',
+    perkText: '協力プロジェクト達成時、全4L+1 ＆ 報酬資金 +5 CR ボーナス',
     avatarUrl: '/images/eiji.jpg'
   },
   {
@@ -50,7 +50,7 @@ export const CHARACTERS: Character[] = [
     name: 'チヒロ',
     riasecType: 'C（慣習的）',
     description: '確実で無駄のないプロセスとリスク管理で組織を安定させるスペシャリスト。',
-    perkText: '4L→スキル変換効率+1 ＆ 毎ターン基本手当+2万円獲得',
+    perkText: '4L→スキル変換効率+1 ＆ 毎ターン基本手当 +2 CR 獲得',
     avatarUrl: '/images/chihiro.jpg'
   }
 ];

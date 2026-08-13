@@ -77,7 +77,7 @@ export const CardSelectionModal: React.FC<Props> = ({
                 <div className="flex items-center justify-center gap-2 text-[11px] font-bold border-t border-white/5 pt-1">
                   {card.moneyEffect !== undefined && card.moneyEffect !== 0 && (
                     <span className={card.moneyEffect > 0 ? 'text-amber-300' : 'text-rose-300'}>
-                      💰 資金 {card.moneyEffect > 0 ? `+${card.moneyEffect}` : card.moneyEffect}万
+                      💰 資金 {card.moneyEffect > 0 ? `+${card.moneyEffect}` : card.moneyEffect} CR
                     </span>
                   )}
                   {card.healthEffect !== undefined && card.healthEffect !== 0 && (

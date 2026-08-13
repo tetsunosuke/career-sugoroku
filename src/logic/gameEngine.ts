@@ -28,7 +28,8 @@ export function createInitialPlayer(
     stats4L: { ...generation.initial4L },
     skills: { ...generation.initialSkills },
     money: initialMoney,
-    health: { ...initialHealth }
+    health: { ...initialHealth },
+    paidLeaves: { used: 0, max: 3 }
   };
 }
 
