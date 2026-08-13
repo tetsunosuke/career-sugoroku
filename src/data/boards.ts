@@ -93,7 +93,8 @@ export const BOARD_TILES: BoardTile[] = [
     skillPt: 1,
     moneyEffect: -3,
     healthEffect: 15,
-    effectDescription: '大切な人との時間を優先。（支出 -3 CR / 体力+15回復）'
+    isMandatoryVacationGen: '40s_50s',
+    effectDescription: '大切な人との時間を優先。（※40-50代は家族介護のため強制有休消化！有休無し時は10 CR消費）'
   },
   {
     id: 7,

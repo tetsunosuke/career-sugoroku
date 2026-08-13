@@ -78,6 +78,7 @@ export interface BoardTile {
   canChangeCourse?: boolean;       // 例: 9番マスコース変更
   directCubeReward?: boolean;       // 例: 12番マス直獲得
   skillCondition?: SkillRequirement; // ポータブルスキル条件判定によるドローボーナス
+  isMandatoryVacationGen?: Generation; // 特定年代での有休強制消化フラグ (例: '40s_50s')
 }
 
 export interface CoOpProject {

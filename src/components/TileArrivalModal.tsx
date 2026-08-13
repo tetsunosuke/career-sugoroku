@@ -1,6 +1,6 @@
 import React from 'react';
-import type { BoardTile, PortableSkills, DeckType, ActionStance } from '../types/game';
-import { Compass, Sparkles, Layers, ArrowRight, CheckCircle2, AlertCircle, Sun, Flame, Coffee } from 'lucide-react';
+import type { BoardTile, PortableSkills, DeckType, ActionStance, Generation } from '../types/game';
+import { Compass, Sparkles, Layers, ArrowRight, CheckCircle2, AlertCircle, Sun, Flame, Coffee, AlertTriangle } from 'lucide-react';
 
 interface Props {
   tile: BoardTile;
@@ -8,6 +8,7 @@ interface Props {
   baseDrawCount: number;
   skillBonusApplied: boolean;
   money: number;
+  generationId?: Generation;
   paidLeaves: { used: number; max: number };
   onSelectStance: (stance: ActionStance, useLeisureDeck?: boolean) => void;
 }
@@ -18,11 +19,16 @@ export const TileArrivalModal: React.FC<Props> = ({
   baseDrawCount,
   skillBonusApplied,
   money,
+  generationId,
   paidLeaves,
   onSelectStance
 }) => {
   const remainingLeaves = paidLeaves.max - paidLeaves.used;
   const canAffordLeisureVacation = money >= 3;
+  
+  // 40代〜50代での強制有給消化イベント対象か判定
+  const isMandatoryVacationEvent =
+    tile.isMandatoryVacationGen === '40s_50s' && generationId === '40s_50s';
 
   const getDeckName = (deck: DeckType | 'choice') => {
     if (deck === 'work') return '💼 仕事 (Labor) の山';
@@ -56,6 +62,17 @@ export const TileArrivalModal: React.FC<Props> = ({
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-wide">
             {tile.name}
           </h2>
+
+          {/* 40-50代介護強制有休日アラート */}
+          {isMandatoryVacationEvent && (
+            <div className="p-3 rounded-xl bg-amber-950/70 border border-amber-500/60 text-xs font-bold text-amber-200 flex items-start gap-2 animate-pulse">
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="block font-black text-amber-300">🚨 40-50代特命: 家族の介護・緊急サポート発生</span>
+                <span>有給休暇を強制的に1回消化して対応します。有休残数が無い場合はペナルティとしてマネー (10 CR) が消費されます。</span>
+              </div>
+            </div>
+          )}
 
           <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
             {tile.effectDescription}
@@ -92,7 +109,12 @@ export const TileArrivalModal: React.FC<Props> = ({
           {/* 1. 引き受ける (通常) */}
           <button
             onClick={() => onSelectStance('normal')}
-            className="p-4 rounded-xl border border-indigo-500/40 bg-slate-900/80 hover:bg-indigo-950/60 hover:border-indigo-400 transition-all space-y-2 group shadow-md"
+            disabled={isMandatoryVacationEvent}
+            className={`p-4 rounded-xl border transition-all space-y-2 group shadow-md ${
+              isMandatoryVacationEvent
+                ? 'border-slate-800 bg-slate-900/40 opacity-30 cursor-not-allowed'
+                : 'border-indigo-500/40 bg-slate-900/80 hover:bg-indigo-950/60 hover:border-indigo-400'
+            }`}
           >
             <div className="flex items-center justify-between">
               <span className="font-extrabold text-sm text-indigo-300 group-hover:text-white flex items-center gap-1">
@@ -111,7 +133,12 @@ export const TileArrivalModal: React.FC<Props> = ({
           {/* 2. かなりがんばってみる (ハードワーク) */}
           <button
             onClick={() => onSelectStance('hardwork')}
-            className="p-4 rounded-xl border border-amber-500/40 bg-slate-900/80 hover:bg-amber-950/60 hover:border-amber-400 transition-all space-y-2 group shadow-md"
+            disabled={isMandatoryVacationEvent}
+            className={`p-4 rounded-xl border transition-all space-y-2 group shadow-md ${
+              isMandatoryVacationEvent
+                ? 'border-slate-800 bg-slate-900/40 opacity-30 cursor-not-allowed'
+                : 'border-amber-500/40 bg-slate-900/80 hover:bg-amber-950/60 hover:border-amber-400'
+            }`}
           >
             <div className="flex items-center justify-between">
               <span className="font-extrabold text-sm text-amber-300 group-hover:text-white flex items-center gap-1">
@@ -128,10 +155,12 @@ export const TileArrivalModal: React.FC<Props> = ({
             </div>
           </button>
 
-          {/* 3. 有給を使う (リフレッシュ) */}
+          {/* 3. 有給を使う (リフレッシュ) / 強制介護有休日 */}
           <div
             className={`p-4 rounded-xl border space-y-2.5 shadow-md flex flex-col justify-between ${
-              remainingLeaves > 0
+              isMandatoryVacationEvent
+                ? 'border-amber-500/80 bg-amber-950/40 ring-2 ring-amber-500/50'
+                : remainingLeaves > 0
                 ? 'border-emerald-500/40 bg-slate-900/80'
                 : 'border-slate-800 bg-slate-900/40 opacity-40'
             }`}
@@ -139,41 +168,55 @@ export const TileArrivalModal: React.FC<Props> = ({
             <div>
               <div className="flex items-center justify-between mb-1">
                 <span className="font-extrabold text-sm text-emerald-300 flex items-center gap-1">
-                  <Coffee className="w-4 h-4 text-emerald-400" /> 有給を使う
+                  <Coffee className="w-4 h-4 text-emerald-400" /> {isMandatoryVacationEvent ? '緊急有休対応' : '有給を使う'}
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
                   残{remainingLeaves}回
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 leading-tight">
-                有休を1回消費し体力回復 (+20 HP)。
+                {isMandatoryVacationEvent
+                  ? '介護のため有給休暇を強制的に消化します。'
+                  : '有休を1回消費し体力回復 (+20 HP)。'}
               </p>
             </div>
 
             <div className="space-y-1.5 pt-1 border-t border-slate-800">
-              {/* 通常有休ドロー */}
-              <button
-                onClick={() => onSelectStance('vacation', false)}
-                disabled={remainingLeaves <= 0}
-                className="w-full py-1.5 px-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-200 transition-all flex items-center justify-between"
-              >
-                <span>🌿 通常有休</span>
-                <span className="text-slate-400 font-normal">無料 (通常山ドロー)</span>
-              </button>
+              {/* 通常有休ドロー / 有休消化ボタン */}
+              {remainingLeaves > 0 ? (
+                <button
+                  onClick={() => onSelectStance('vacation', false)}
+                  className="w-full py-2 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 border border-emerald-400 text-xs font-black text-white shadow-lg transition-all flex items-center justify-between"
+                >
+                  <span>🌿 {isMandatoryVacationEvent ? '有休消化して対応' : '通常有休'}</span>
+                  <span>体力 +20 HP</span>
+                </button>
+              ) : (
+                /* 有給残数が0の場合のマネーペナルティボタン */
+                <button
+                  onClick={() => onSelectStance('vacation', false)}
+                  className="w-full py-2 px-2 rounded-lg bg-rose-600 hover:bg-rose-500 border border-rose-400 text-xs font-black text-white shadow-lg transition-all flex items-center justify-between animate-pulse"
+                >
+                  <span>💸 有休不足対応</span>
+                  <span>-10 CR 消費</span>
+                </button>
+              )}
 
-              {/* 贅沢有休ドロー (Leisure山から引く) */}
-              <button
-                onClick={() => onSelectStance('vacation', true)}
-                disabled={remainingLeaves <= 0 || !canAffordLeisureVacation}
-                className={`w-full py-1.5 px-2 rounded-lg border text-[10px] font-bold transition-all flex items-center justify-between ${
-                  canAffordLeisureVacation
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 border-emerald-400 text-white shadow-lg'
-                    : 'bg-slate-900/50 border-slate-800 text-slate-500 cursor-not-allowed'
-                }`}
-              >
-                <span className="flex items-center gap-1">✨ 贅沢有休旅行</span>
-                <span>💰 3 CR (Leisure山ドロー)</span>
-              </button>
+              {/* 贅沢有休ドロー (非介護時のみ) */}
+              {!isMandatoryVacationEvent && (
+                <button
+                  onClick={() => onSelectStance('vacation', true)}
+                  disabled={remainingLeaves <= 0 || !canAffordLeisureVacation}
+                  className={`w-full py-1.5 px-2 rounded-lg border text-[10px] font-bold transition-all flex items-center justify-between ${
+                    canAffordLeisureVacation
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 border-emerald-400 text-white shadow-lg'
+                      : 'bg-slate-900/50 border-slate-800 text-slate-500 cursor-not-allowed'
+                  }`}
+                >
+                  <span className="flex items-center gap-1">✨ 贅沢有休旅行</span>
+                  <span>💰 3 CR (Leisure山ドロー)</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
