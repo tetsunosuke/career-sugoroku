@@ -381,9 +381,15 @@ export const GameContainer: React.FC = () => {
 
     addLog(`スキル自由配分: [ ${logsList.join(', ')} ]`, 'skill');
 
+    // ゴールマス(12番マス以上)に到達している場合はリザルトへ
+    if (currentPosition >= 12) {
+      setPhase('GAME_OVER');
+      return;
+    }
+
     // 9番マスのコース変更特権確認（スキル割り振り後に表示）
     const currentTile = BOARD_TILES[currentPosition];
-    if (currentTile.canChangeCourse) {
+    if (currentTile && currentTile.canChangeCourse) {
       setCanChangeCourseModal(true);
     }
 
