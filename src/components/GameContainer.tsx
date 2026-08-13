@@ -329,16 +329,9 @@ export const GameContainer: React.FC = () => {
     setCanChangeCourseModal(false);
   };
 
-  // 3. 意味づけフェーズ (スキルポイント割り振り)
-  const handleAllocateSkill = (allocatedSkill: SkillType, amount: number) => {
+  // 3. 意味づけフェーズ (スキルポイント自由配分)
+  const handleAllocateSkill = (allocatedMap: Record<SkillType, number>) => {
     if (!player) return;
-
-    const newSkills = {
-      ...player.skills,
-      [allocatedSkill]: player.skills[allocatedSkill] + amount
-    };
-
-    setPlayer({ ...player, skills: newSkills });
 
     const skillNames: Record<SkillType, string> = {
       interpersonal: '対人',
@@ -346,7 +339,22 @@ export const GameContainer: React.FC = () => {
       execution: '実行',
       flexibility: '柔軟'
     };
-    addLog(`スキル割り振り: ${skillNames[allocatedSkill]} +${amount} pt`, 'skill');
+
+    let updatedSkills = { ...player.skills };
+    const logsList: string[] = [];
+
+    (Object.keys(allocatedMap) as SkillType[]).forEach((sk) => {
+      const allocatedPt = allocatedMap[sk];
+      if (allocatedPt > 0) {
+        const gainedPt = computeSkillPoints(player.character, sk, allocatedPt, player.course);
+        updatedSkills[sk] += gainedPt;
+        logsList.push(`${skillNames[sk]} +${gainedPt}pt`);
+      }
+    });
+
+    setPlayer({ ...player, skills: updatedSkills });
+
+    addLog(`スキル自由配分: [ ${logsList.join(', ')} ]`, 'skill');
 
     // 9番マスのコース変更特権確認（スキル割り振り後に表示）
     const currentTile = BOARD_TILES[currentPosition];
